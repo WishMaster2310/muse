@@ -8,5 +8,8 @@
 
 ## Список команд
 1. Создать страницу
- `node sitemuse add page %PAGENAME% -f`
+```sh
+node sitemuse add page %PAGENAME% -f
+
+```
 Ключик -f создает файл с фикстурой для этой страницы
