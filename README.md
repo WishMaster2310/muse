@@ -2,8 +2,11 @@
 
 Шаблонизатор на Node.js для генерациии шаблонов к Site Muse
 
+## Как использовать
+1. Клонним репу
+2. Запускаем npm install
 
 ## Список команд
-
-`sh
-node sitemuse add page %PageName% -f
+1. Создать страницу
+ `node sitemuse add page %PAGENAME% -f`
+Ключик -f создает файл с фикстурой для этой страницы
