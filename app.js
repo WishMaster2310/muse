@@ -8,7 +8,7 @@ var Twig = require('twig');
 var twig = Twig.twig;
 var routes = require('./routes/index');
 var users = require('./routes/users');
-
+var sitemuse = require('./routes/sitemuse');
 var app = express();
 
 // view engine setup
@@ -25,13 +25,19 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
 app.use('/users', users);
+app.use('/sitemuse', sitemuse);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  var err = new Error('Not Found');
+  var err = new Error('Not Found')
   err.status = 404;
   next(err);
 });
+
+
+var watcher = require('./modules/watcher')();
+
+console.log(watcher)
 
 // error handlers
 
@@ -56,6 +62,9 @@ app.use(function(err, req, res, next) {
     error: {}
   });
 });
+
+
+// watcher
 
 
 module.exports = app;

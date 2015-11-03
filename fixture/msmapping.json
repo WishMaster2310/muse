@@ -1,11 +1,205 @@
 {
     "pages": [
         {
+            "name": "ewewewe",
+            "fixture": false,
+            "_id": "4a60a5be9296683c0beadb6f9f963635f9b13d10",
+            "msid": "676767",
+            "status": "sync",
+            "ctime": 1446544351175
+        },
+        {
             "name": "index",
-            "id": "12212121"
+            "fixture": true,
+            "_id": "ac241f7c05a3b986e5a61951690f9c17ab3d59be",
+            "msid": "6767",
+            "status": "sync",
+            "ctime": 1446544358698
+        },
+        {
+            "name": "56566",
+            "fixture": true,
+            "_id": "b38aadc793683655c79032d3c8feb71a3e2e78f5",
+            "msid": "wewewe",
+            "status": "sync",
+            "ctime": 1446544540094
+        },
+        {
+            "name": "вавава",
+            "fixture": true,
+            "_id": "17ebfc43dc892ea40cc4c3ed66ccc7759e248dc0",
+            "msid": "rtrtrtrtrt",
+            "status": "sync",
+            "ctime": 1446544870825
+        },
+        {
+            "name": "wewewewe",
+            "fixture": true,
+            "_id": "861003aab0bb9398b0eae9928df26cd6a29e5efa",
+            "msid": "dfdfd",
+            "status": "sync",
+            "ctime": 1446551322450
+        },
+        {
+            "name": "wewewewee",
+            "fixture": true,
+            "_id": "305137c3a97bbfddfebc1fc153aab3fb7a51d8ff",
+            "msid": "wewewe",
+            "status": "sync",
+            "ctime": 1446561117153
         }
     ],
     "fragments": [
-       
+        {
+            "name": "6767676767",
+            "fixture": false,
+            "_id": "bb684b2f58710fb1b7913743fd1ea19b854b208a",
+            "msid": "wewewe",
+            "status": "sync",
+            "ctime": 1446545482634
+        },
+        {
+            "name": "56565343212212",
+            "fixture": true,
+            "_id": "06281b13d3cc7d61e07cd878204fc6a0993a3565",
+            "msid": "wewew",
+            "status": "sync",
+            "ctime": 1446545549626
+        }
+    ],
+    "images": [
+        {
+            "path": "d:\\projects\\sitemuse\\public\\images\\post_servis_modernizer.jpg",
+            "filename": "post_servis_modernizer.jpg",
+            "size": 23473,
+            "msid": "",
+            "id": "76d6e3c3b5b6bc025e9e736e0700b793fd6a7d01"
+        },
+        {
+            "path": "d:\\projects\\sitemuse\\public\\images\\header-exampl3.jpg",
+            "filename": "header-exampl3.jpg",
+            "size": 180437,
+            "msid": "",
+            "id": "371d913386b38befd7d5b044527e38163b5f8b61"
+        },
+        {
+            "path": "d:\\projects\\sitemuse\\public\\images\\hybrid_history.jpg",
+            "filename": "hybrid_history.jpg",
+            "size": 16261,
+            "msid": "",
+            "id": "076a059555d9d99ef7a9cdac500658e98c4e4497"
+        },
+        {
+            "path": "d:\\projects\\sitemuse\\public\\images\\logo_crock.png",
+            "filename": "logo_crock.png",
+            "size": 5529,
+            "msid": "",
+            "id": "79e001cc68c9dde75cdb778a0941d2d7bf7487a3"
+        },
+        {
+            "path": "d:\\projects\\sitemuse\\public\\images\\logo_dataline.jpg",
+            "filename": "logo_dataline.jpg",
+            "size": 4919,
+            "msid": "",
+            "id": "6c3d129b7230e38c030cde1ac670976a72b3cc68"
+        },
+        {
+            "path": "d:\\projects\\sitemuse\\public\\images\\logo_elmoscow.png",
+            "filename": "logo_elmoscow.png",
+            "size": 3483,
+            "msid": "",
+            "id": "eb6ce99d7d444fe1fc4544bc420af09d169ee2cc"
+        },
+        {
+            "path": "d:\\projects\\sitemuse\\public\\images\\logo_infobox.png",
+            "filename": "logo_infobox.png",
+            "size": 3035,
+            "msid": "",
+            "id": "22172247217bba12fb46ee420e5d627d9a60507e"
+        },
+        {
+            "path": "d:\\projects\\sitemuse\\public\\images\\logo_oblokoteka.jpg",
+            "filename": "logo_oblokoteka.jpg",
+            "size": 5357,
+            "msid": "",
+            "id": "125b8115a9efa4cf9a9afe8151260223426cb075"
+        },
+        {
+            "path": "d:\\projects\\sitemuse\\public\\images\\logo_rt.png",
+            "filename": "logo_rt.png",
+            "size": 4401,
+            "msid": "",
+            "id": "8865a10dcc353df2c05307a1cbe4184d7cb3e672"
+        },
+        {
+            "path": "d:\\projects\\sitemuse\\public\\images\\logo_softline.png",
+            "filename": "logo_softline.png",
+            "size": 8322,
+            "msid": "",
+            "id": "b6ef6d4ceadddd5c75088125c6a5ee730f9d0811"
+        },
+        {
+            "path": "d:\\projects\\sitemuse\\public\\images\\material1.jpg",
+            "filename": "material1.jpg",
+            "size": 11640,
+            "msid": "",
+            "id": "30d0b5a9bb761fbae38fdaed03bcc3ec53b8c158"
+        },
+        {
+            "path": "d:\\projects\\sitemuse\\public\\images\\page-bg.jpg",
+            "filename": "page-bg.jpg",
+            "size": 71108,
+            "msid": "",
+            "id": "c64f7868f2ca61e7836ba6f06eaba0c542e3e04d"
+        },
+        {
+            "path": "d:\\projects\\sitemuse\\public\\images\\partner-bg.jpg",
+            "filename": "partner-bg.jpg",
+            "size": 51271,
+            "msid": "",
+            "id": "d11448b403f528e52b0895a91f3545ab4ffb3360"
+        },
+        {
+            "path": "d:\\projects\\sitemuse\\public\\images\\slide2.png",
+            "filename": "slide2.png",
+            "size": 2512,
+            "msid": "",
+            "id": "f4acd21097170ca8d470f3357bf9164d26e3e18c"
+        },
+        {
+            "path": "d:\\projects\\sitemuse\\public\\images\\slide3.png",
+            "filename": "slide3.png",
+            "size": 2390,
+            "msid": "",
+            "id": "0f38212ed08651a0fe8a4c9905b1b93f6b91af84"
+        },
+        {
+            "path": "d:\\projects\\sitemuse\\public\\images\\slide_cup.gif",
+            "filename": "slide_cup.gif",
+            "size": 335539,
+            "msid": "",
+            "id": "21abc627a8092c41e6cbaa3d1367c24675497398"
+        },
+        {
+            "path": "d:\\projects\\sitemuse\\public\\images\\softlinecloud.jpg",
+            "filename": "softlinecloud.jpg",
+            "size": 15231,
+            "msid": "",
+            "id": "bdebd22645becb8c8c06d0ea319d523f15374781"
+        },
+        {
+            "path": "d:\\projects\\sitemuse\\public\\images\\sprite.png",
+            "filename": "sprite.png",
+            "size": 88347,
+            "msid": "",
+            "id": "0ff06a16d11569c9aadb45179634b180eb4119d5"
+        },
+        {
+            "path": "d:\\projects\\sitemuse\\public\\images\\testirovanie_oblachnoi_infrastructuri.jpg",
+            "filename": "testirovanie_oblachnoi_infrastructuri.jpg",
+            "size": 14882,
+            "msid": "",
+            "id": "0e95981cf90ca94dfe11ddec040e523b162b2d8d"
+        }
     ]
 }
