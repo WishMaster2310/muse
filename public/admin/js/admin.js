@@ -4,10 +4,11 @@ var m_site = {
 	fragments: ko.observableArray(),
 	pages: ko.observableArray(),
 	images: ko.observableArray(),
+	activeGroup: ko.observable(),
 	activeTab: ko.observable('fragments'),
 	addNewElem: function(d) {
 		var obj = {
-			model: d,
+			group: d,
 			name: m_site.newElemName()
 		};
 
@@ -23,16 +24,18 @@ var m_site = {
 		$.ajax({
 			method: 'GET',
 			data: obj,
-			url: '/sitemuse/addContentUnit'
+			url: '/sitemuse/addPage'
 		}).done(function(data) {
+			
 			if (data.error) {
-				alert(d.error.message);
+				alert(d.error);
 				return
 			};
 
 			loadItems ();
 			$.arcticmodal('close');
 			m_site.newElemName('');
+
 			if (d === 'fragment') {
 				m_site.activeTab('fragments')
 			} else if (d === 'page')  {
@@ -41,27 +44,26 @@ var m_site = {
 		})
 	},
 	removeElem: function(m, d) {
-
-		
 		var obj = {
-			model: m,
+			group: m,
 		 	name: d
 		};
 
 		$.ajax({
 			method: 'GET',
 			data: obj,
-			url: '/sitemuse/removeContentUnit'
+			url: '/sitemuse/deletePage'
 		}).done(function(d) {
 
 			if (d.error) {
-				alert(d.error.message);
+				alert(d.error);
 				return
 			};
 
 			loadItems ();
 		})
 	},
+
 	updmsid: function(d, m) {
 		var item = ko.toJS(d);
 
@@ -97,7 +99,7 @@ var m_site = {
 			data: item,
 			url: '/sitemuse/removeImage'
 		}).done(function(d) {
-			
+
 		});
 	}
 }

@@ -10091,30 +10091,30 @@ body {
 }
 .comp-list__item-tags {
   list-style-type: none;
-  margin: 15px 0 0 -20px;
+  margin: 10px 0 0 -15px;
   padding: 0;
 }
 .comp-list__item-tags li {
   display: inline-block;
   vertical-align: top;
   padding: 0px 10px;
-  font-size: 14px;
+  font-size: 10px;
   background: #c0c0c0;
   position: relative;
-  margin-left: 20px;
+  margin-left: 15px;
   font-weight: bold;
-  height: 30px;
-  line-height: 30px;
+  height: 16px;
+  line-height: 16px;
 }
 .comp-list__item-tags li:after {
   content: "";
   position: absolute;
   top: 0px;
   height: 0;
-  right: -15px;
-  border-top: 15px solid transparent;
-  border-bottom: 15px solid transparent;
-  border-left: 15px solid #c0c0c0;
+  right: -8px;
+  border-top: 8px solid transparent;
+  border-bottom: 8px solid transparent;
+  border-left: 8px solid #c0c0c0;
   display: block;
 }
 .comp-list__item-tags li.tag-json {

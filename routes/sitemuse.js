@@ -1,113 +1,105 @@
 var express = require('express');
 var router = express.Router();
+var swig = require('swig');
+var twig = require('twig');
 
 var fs = require('fs');
 var _ = require('lodash');
 var moment = require('moment');
 var path = require('path');
 var crypto = require('crypto'); 
+var async = require('async');
+var colors = require('colors');
 
-var FIXTURES_FRAGMENTS_DIR = './fixture/fragments/';
-var VIEWS_FRAGMENTS_DIR = './views/fragments/';
 var IMAGES_DIR = './public/images/';
 var MSMAP_FILE = path.join(__dirname, "../fixture/msmapping.json");
 var MSMAP = require(MSMAP_FILE);
+var VIEWS_PATH = './views/';
+var FIXTURE_PATH = './fixture/';
+var EXPORT_PAGES = path.join(__dirname,  '../export/pages');
+var EXPORT_FRAGMENTS = path.join(__dirname,  '../export/fragments');
 
-var FIXTURES_PAGES_DIR = './fixture/pages/';
-var VIEWS_PAGES_DIR = './views/pages/';
+var Page = function(arguments) {
+	this.name = arguments.name;
+	this.group = arguments.group;
+	this.origin = arguments.origin;	
+	this.status = arguments.status || 'new';
+	this.fixture = arguments.fixture || false;	
+	this.msid = arguments.msid || '';
+	this._id = crypto.randomBytes(20).toString('hex');
+	this.ctime = Date.now();
+}
+
+function createPage (page) {
+	var itemGroup = page.group;
+	var viewsPath =  path.join(VIEWS_PATH, itemGroup, page.name + '.twig');
+	var fixturePath = path.join(FIXTURE_PATH, itemGroup, page.name + '.json');
+	var viewsOrigin = path.join(VIEWS_PATH, 'proto', page.origin + '.twig')
+
+	if (!page.origin) {
+		viewsOrigin = path.join(VIEWS_PATH, 'proto', '__' +  page.group + '.twig');
+	}
+
+	console.log('viewsOrigin',viewsOrigin)
 
 
-function CreateTemplates (mod, name, flag) {
-	var _fixPath = FIXTURES_PAGES_DIR, _viewsPath = VIEWS_PAGES_DIR, _msMap = 'pages', mapItem = {};
+	if (_.findIndex(MSMAP[itemGroup], {name: page.name}) < 0) {
 
-	var fileData = '{% extends "../layout.twig" %}\n {% block content %}{% endblock %}'
+		fs.createReadStream(viewsOrigin).pipe(fs.createWriteStream(viewsPath));
 
-	if (mod === 'fragment') {
-		_fixPath = FIXTURES_FRAGMENTS_DIR;
-		_viewsPath = VIEWS_FRAGMENTS_DIR;
-		_msMap = 'fragments';
-		var fileData = '';
-	};
-
-	mapItem.name = name;
-	mapItem.fixture = false;
-	mapItem._id = crypto.randomBytes(20).toString('hex');
-	
-
-	if (_.findIndex(MSMAP[_msMap], { 'name': name }) < 0) {
-
-		mapItem.msid = "";
-		mapItem.status = 'new';
-
-		fs.writeFile(_viewsPath + name + '.twig', fileData , function(err) {
-			
-			if (err) {
-			    return console.log(err);
-			}
-
-			mapItem.ctime = Date.now();
-
-			if (flag) {
-
-				fs.writeFileSync(_fixPath + name + '.json', '{"name": ""}');
-				mapItem.fixture = true;
-			    MSMAP[_msMap].push(mapItem);
+		// Создаем фикстуру если надо и сохраняем
+		if (page.fixture) {
+			fs.writeFile(fixturePath, '{"name": ""}', function(err) {
+				// Записываем в "Базу" (JSON)
+				MSMAP[itemGroup].push(new Page(page));
 				fs.writeFileSync(MSMAP_FILE, JSON.stringify(MSMAP, null, 4));
-
-			} else{
-
-				MSMAP[_msMap].push(mapItem);
-				fs.writeFileSync(MSMAP_FILE, JSON.stringify(MSMAP, null, 4));
-			}
-
-			
-		});
-	} else {
-		throw {
-			message: 'file already exist'
+			});
+		} else {
+			// Записываем в "Базу" (JSON)
+			MSMAP[itemGroup].push(new Page(page));
+			fs.writeFileSync(MSMAP_FILE, JSON.stringify(MSMAP, null, 4));
 		}
+
+	} else {
+		throw new Error('Name not uniq');
 	}
-};
+}
 
-function RemoveTemplate (mod, name) {
-	var _fixPath = FIXTURES_PAGES_DIR, _viewsPath = VIEWS_PAGES_DIR, _msMap = 'pages';
+function deletePage (arguments) {
 
-	if (mod === 'fragment') {
-		_fixPath = FIXTURES_FRAGMENTS_DIR;
-		_viewsPath = VIEWS_FRAGMENTS_DIR;
-		_msMap = 'fragments';
-	}
+	var group = arguments.group;
+	var name = arguments.name;
 
+	var viewsPath =  path.join(VIEWS_PATH, group, name + '.twig');
+	var fixturePath =  path.join(FIXTURE_PATH, group, name + '.json');
 
-	var a = _.findIndex(MSMAP[_msMap], { 'name': name });
+	var marker = _.findIndex(MSMAP[group], { 'name': name });
 
-	if (a != -1) {
+	if (marker >= 0) {
 
-		fs.unlink(_viewsPath + name + '.twig', function(err) {
-	
-			if(err) {
-		        return console.log(err);
-		    }
-		    _.remove(MSMAP[_msMap], function(n) {
+		fs.unlink(viewsPath, function(err) {
+
+			if(err) throw new Error('Remove Page Failure');
+
+		    // Удаляем запись из JSON 
+		    var kenny = _.remove(MSMAP[group], function(n) {
 				return n.name === name
 			});
 
+			// Сохраняем JSON
 		    fs.writeFileSync(MSMAP_FILE, JSON.stringify(MSMAP, null, 4));
+			
+			// Если у страницы была фикстура, удаляем и ее тоже
+		    if (kenny.fixture) fs.unlinkSync(fixturePath);
+
+		  // удаляем экспортый файлик
+		    var _export_file = path.join(__dirname,  '../export/', group, name + '.html');
+				if (fs.existsSync(_export_file)) {fs.unlinkSync(_export_file)};
 		});
 
 	} else {
-		throw {
-			message: 'File not exist'
-		}
+		throw new Error('Page not found');	
 	}
-
-	
-	fs.unlink(_fixPath + name + '.json', function(err) {
-
-		if(err) {
-	        return console.log('no-fixture');
-	    }
-	});
 }
 
 function updateItem (arguments)  {
@@ -131,34 +123,43 @@ function removeImage (p) {
 	fs.unlinkSync(p);
 }		
 
-/* GET home page. */
+
+/* GET API page. */
 router.get('/', function(req, res, next) {
   res.render('admin/manager.twig', { title: 'Sitemuse' });
 });
 
 
-router.get('/addContentUnit', function(req, res, next) {
+
+router.get('/addPage', function(req, res, next) {
 	try  {
-		CreateTemplates(req.query.model, req.query.name, req.query.fixture);
+		createPage(req.query);
 		res.send({});	
 	} catch (err) {
+		console.log(err)
 		res.send({error: err});
 	}
 });
 
-router.get('/removeContentUnit', function(req, res, next) {
-	console.log(req.query);
-	RemoveTemplate(req.query.model, req.query.name);
-  	res.send(req.query);
+router.get('/deletePage', function(req, res, next) {
+	try  {
+		deletePage (req.query);
+		res.send({})
+	} catch (err) {
+		res.send({error: err.message});
+	}
 });
+
 
 router.post('/uploadFiles', function(req, res, next) {
 	console.log(req);
 });
 
+
 router.get('/getmapping', function(req, res, next) {
   	res.send(MSMAP);
 });
+
 
 router.get('/updateItem', function(req, res, next) {
   	try  {
@@ -171,7 +172,7 @@ router.get('/updateItem', function(req, res, next) {
 
 
 router.get('/removeImage', function(req, res, next) {
-  	try  {
+  try  {
 		fs.unlinkSync(req.query.path);
 		res.send({});
 	} catch (err) {
@@ -180,6 +181,61 @@ router.get('/removeImage', function(req, res, next) {
 });
 
 
+router.get('/export', function(req, res, next) {
+  renderMusePage(req.params.pages, function() {
+  	res.send({'done': true})
+  }, next);
+});
+
+function renderMusePage (callback, next) {
+	var path_pages = path.join(VIEWS_PATH, 'pages');
+	var path_fragments = path.join(VIEWS_PATH, 'fragments');
+	var pages = fs.readdirSync(path_pages);
+	var fragments = fs.readdirSync(path_fragments);
+
+	if (!fs.existsSync(EXPORT_PAGES)) {fs.mkdirSync(EXPORT_PAGES);}
+	if (!fs.existsSync(EXPORT_FRAGMENTS)) {fs.mkdirSync(EXPORT_FRAGMENTS);}
+		
+	async.each(pages, function(page, callback) {
+		var _template = path.join(__dirname,  '../views', 'pages', page);
+		var content = swig.renderFile(_template);
+
+		try {
+			 fs.writeFileSync(path.join(EXPORT_PAGES, path.parse(page).name + '.html'), content);
+			 console.log('[SiteMuse]:'.green, (path.parse(page).name + '.html').gray, 'successfully rendered'); 
+			 callback()
+			} catch (err) {
+				callback(err)
+			}
+		}, function(err){
+			if ( err ) {
+				console.log(err);
+			} else{
+				console.log('[SiteMuse]: Pages export done successfully'.green);
+			}
+	});
+
+	async.each(fragments, function(page, callback) {
+		var _template = path.join(__dirname,  '../views', 'fragments', page);
+		var content = swig.renderFile(_template);
+		
+		try {
+			 fs.writeFileSync(path.join(EXPORT_FRAGMENTS, path.parse(page).name + '.html'), content);
+			 console.log('[SiteMuse]:'.green, (path.parse(page).name + '.html').gray, 'successfully rendered'); 
+			 callback()
+			} catch (err) {
+				callback(err)
+			}
+		}, function(err){
+			if ( err ) {
+				console.log(err);
+			} else{
+				console.log('[SiteMuse]: Fragments export done successfully'.green);
+			}
+	});
+
+	callback();
+}
 
 
 module.exports = router;
