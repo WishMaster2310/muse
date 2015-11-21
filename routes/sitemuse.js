@@ -182,10 +182,17 @@ router.get('/removeImage', function(req, res, next) {
 
 
 router.get('/export', function(req, res, next) {
-  renderMusePage(req.params.pages, function() {
+  renderMusePage(function() {
+  	res.redirect('/sitemuse')
+  }, next);
+});
+
+router.get('/sync', function(req, res, next) {
+  syncWithMap(function() {
   	res.send({'done': true})
   }, next);
 });
+
 
 function renderMusePage (callback, next) {
 	var path_pages = path.join(VIEWS_PATH, 'pages');
@@ -197,6 +204,7 @@ function renderMusePage (callback, next) {
 	if (!fs.existsSync(EXPORT_FRAGMENTS)) {fs.mkdirSync(EXPORT_FRAGMENTS);}
 		
 	async.each(pages, function(page, callback) {
+
 		var _template = path.join(__dirname,  '../views', 'pages', page);
 		var content = swig.renderFile(_template);
 
@@ -216,6 +224,7 @@ function renderMusePage (callback, next) {
 	});
 
 	async.each(fragments, function(page, callback) {
+
 		var _template = path.join(__dirname,  '../views', 'fragments', page);
 		var content = swig.renderFile(_template);
 		
@@ -237,5 +246,29 @@ function renderMusePage (callback, next) {
 	callback();
 }
 
+function syncWithMap (callback, next) {
+	checkSyncedFolder('pages');
+	checkSyncedFolder('fragments');
+	callback();
+}
+
+
+function checkSyncedFolder (units) {
+	var path_to_units = path.join(VIEWS_PATH, units);
+	var units_list = fs.readdirSync(path_to_units);
+
+	async.each(units_list, function(page, func) {
+
+		var indx = _.findIndex(MSMAP[units], { 'name': path.parse(page).name});
+		if ( indx === -1) {
+			try{
+				fs.unlinkSync(path.join(path_to_units, page));
+				console.log('[SiteMuse]:'.green, (page).gray, 'successfully deleted'); 
+			} catch(err){
+				console.log('[SiteMuse ERROR]:'.red, err); 
+			}
+		}
+	});
+}
 
 module.exports = router;
