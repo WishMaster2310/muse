@@ -26,19 +26,27 @@
             "msid": "",
             "_id": "82b6a6b2892153e48eaa95bab4096bc995fc9678",
             "ctime": 1448111183552
-        }
-    ],
-    "fragments": [
+        },
         {
-            "name": "5656",
-            "group": "fragments",
+            "name": "newpage",
+            "group": "pages",
             "status": "new",
-            "fixture": false,
+            "fixture": "true",
             "msid": "",
-            "_id": "7777bd1798184e823092e54aaced23def0421784",
-            "ctime": 1448107297316
+            "_id": "2cdd78286e9fcf8f226a702ee44596d08eb0d203",
+            "ctime": 1450686517910
+        },
+        {
+            "name": "eee",
+            "group": "pages",
+            "status": "new",
+            "fixture": "true",
+            "msid": "",
+            "_id": "716608942e5de118ca17a11a4768d2033f1083bc",
+            "ctime": 1450691478235
         }
     ],
+    "fragments": [],
     "images": [
         {
             "path": "d:\\projects\\sitemuse\\public\\images\\softlinecloud.jpg",

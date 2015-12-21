@@ -3,7 +3,7 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('pages/index.twig', { title: 'Expresdsssdsdsss' });
+  res.render('pages/index.twig', { title: '' });
 });
 
 module.exports = router;

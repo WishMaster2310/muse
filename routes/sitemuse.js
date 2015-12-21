@@ -40,9 +40,6 @@ function createPage (page) {
 		viewsOrigin = path.join(VIEWS_PATH, 'proto', '__' +  page.group + '.twig');
 	}
 
-	console.log('viewsOrigin',viewsOrigin)
-
-
 	if (_.findIndex(MSMAP[itemGroup], {name: page.name}) < 0) {
 
 		fs.createReadStream(viewsOrigin).pipe(fs.createWriteStream(viewsPath));
@@ -193,7 +190,6 @@ router.get('/sync', function(req, res, next) {
   }, next);
 });
 
-
 function renderMusePage (callback, next) {
 	var path_pages = path.join(VIEWS_PATH, 'pages');
 	var path_fragments = path.join(VIEWS_PATH, 'fragments');
@@ -206,20 +202,34 @@ function renderMusePage (callback, next) {
 	async.each(pages, function(page, callback) {
 
 		var _template = path.join(__dirname,  '../views', 'pages', page);
-		var content = swig.renderFile(_template);
+		var _tmp = path.join(__dirname,  '../views/_tmp', page);
+		var pageData = path.join(__dirname,  '../fixture', 'pages', path.parse(page).name + '.json');
+		var a = fs.readFileSync(_template, 'utf-8');
 
-		try {
-			 fs.writeFileSync(path.join(EXPORT_PAGES, path.parse(page).name + '.html'), content);
-			 console.log('[SiteMuse]:'.green, (path.parse(page).name + '.html').gray, 'successfully rendered'); 
-			 callback()
-			} catch (err) {
-				callback(err)
-			}
-		}, function(err){
+		injectFragments(a, page, function() {
+		//	console.log(reD, '============== RE Content');
+
+			fs.stat(pageData, function(err, stat) {
+	  		if(err == null) {
+		     	var content = swig.renderFile(_tmp, JSON.parse(fs.readFileSync(pageData, 'utf8')));
+		    } else  {
+		      var content = swig.renderFile(_tmp, {});
+		    } 
+		    try {
+		    	
+				 fs.writeFileSync(path.join(EXPORT_PAGES, path.parse(page).name + '.html'), content);
+				 console.log('[SiteMuse]:'.green, (path.parse(page).name + '.html').gray, 'successfully rendered'); 
+				 callback()
+				} catch (err) {
+					callback(err)
+				}
+			});
+		}); 
+	}, function(err){
 			if ( err ) {
 				console.log(err);
 			} else{
-				console.log('[SiteMuse]: Pages export done successfully'.green);
+				console.log(colors.green('[SiteMuse]: Pages export done successfully'));
 			}
 	});
 
@@ -242,7 +252,6 @@ function renderMusePage (callback, next) {
 				console.log('[SiteMuse]: Fragments export done successfully'.green);
 			}
 	});
-
 	callback();
 }
 
@@ -270,5 +279,37 @@ function checkSyncedFolder (units) {
 		}
 	});
 }
-//      \{\{+\s+include\s+\"fragments\/([^\"]*)"[^\}]*\}\} - regexp 
+
+/*function _injectFragments (content, p, cb) {
+	var re = new RegExp(/\{\%+\s+include\s+\"..\/fragments\/([^\"]*)"[^\}]*\%\}/g);
+
+	var r = content.replace(re, '$1');
+
+
+	fs.writeFileSync(path.join(__dirname, '../views/_tmp/', p), r)
+	cb()
+}*/
+
+function injectFragments (content, p, cb) {
+
+	//var r = content.replace(re, '$1');
+
+
+
+	async.forEach(MSMAP.fragments, function(n, next) {
+		var re = new RegExp('\\{\\%+\\s+include\\s+\\"..\\/fragments\\/'+ n.name +'.twig([^\\"]*)"[^\\}]*\\%\\}', 'g');
+
+		var replacement = '<mscontentinclude payloadGuid="'+ n._id + '" />';
+
+
+		var result = content.replace(re, replacement);
+		console.log('_________________', re);
+		fs.writeFileSync(path.join(__dirname, '../views/_tmp/', p), result);
+		next()
+	}, function() { console.log('async cb'); cb()})
+
+};
+
+//_injectFragments ()
+//       - regexp 
 module.exports = router;

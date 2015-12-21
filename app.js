@@ -10,6 +10,8 @@ var routes = require('./routes/index');
 var users = require('./routes/users');
 var sitemuse = require('./routes/sitemuse');
 var app = express();
+var fs = require('fs');
+var _ = require('lodash')
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -23,9 +25,37 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', routes);
-app.use('/users', users);
+//app.use('/', routes);
+//app.use('/users', users);
 app.use('/sitemuse', sitemuse);
+
+app.all('*', function(req, res, next) {
+  var viewsDir = fs.readdirSync('./views/pages');
+  var dataDir = fs.readdirSync('./fixture/pages');
+  var reqPath = _.compact(req.url.split('/'));
+  var d = {};
+
+  // find page
+  var targetPage = _.find(viewsDir, function(n) {
+    return n == reqPath + '.twig'
+  });
+
+  // find page Data
+  var targetData = _.find(dataDir, function(n) {
+    return n == reqPath + '.json'
+  });
+  
+  if (!!targetData) {
+    d = require('./fixture/pages/' + targetData);
+  };  
+
+  if (!!targetPage) {
+    res.render('pages/' + targetPage, d)
+  } else {
+    throw new Error('404 Page '+ reqPath + ' Not Found')
+  }
+});
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -35,11 +65,10 @@ app.use(function(req, res, next) {
 });
 
 
+// watch for file changes in images folder
 var watcher = require('./modules/watcher')();
 
-console.log(watcher)
 
-// error handlers
 
 // development error handler
 // will print stacktrace
@@ -62,8 +91,6 @@ app.use(function(err, req, res, next) {
     error: {}
   });
 });
-
-
 // watcher
 
 
