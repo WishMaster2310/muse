@@ -1,4 +1,25 @@
 @charset "UTF-8";
+@font-face {
+  font-family: 'wf_segoe-ui';
+  src: url("https://c.s-microsoft.com/static/fonts/segoe-ui/cyrillic/normal/latest.eot");
+  src: url("https://c.s-microsoft.com/static/fonts/segoe-ui/cyrillic/normal/latest.eot?#iefix") format("embedded-opentype"), url("https://c.s-microsoft.com/static/fonts/segoe-ui/cyrillic/normal/latest.woff") format("woff"), url("https://c.s-microsoft.com/static/fonts/segoe-ui/cyrillic/normal/latest.ttf") format("truetype"), url("https://c.s-microsoft.com/static/fonts/segoe-ui/cyrillic/normal/latest.svg#web") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'wf_segoe-ui';
+  src: url("https://c.s-microsoft.com/static/fonts/segoe-ui/cyrillic/light/latest.eot");
+  src: url("https://c.s-microsoft.com/static/fonts/segoe-ui/cyrillic/light/latest.eot?#iefix") format("embedded-opentype"), url("https://c.s-microsoft.com/static/fonts/segoe-ui/cyrillic/light/latest.woff") format("woff"), url("https://c.s-microsoft.com/static/fonts/segoe-ui/cyrillic/light/latest.ttf") format("truetype"), url("https://c.s-microsoft.com/static/fonts/segoe-ui/cyrillic/light/latest.svg#web") format("svg");
+  font-weight: 100;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'wf_segoe-ui';
+  src: url("https://c.s-microsoft.com/static/fonts/segoe-ui/cyrillic/semilight/latest.eot");
+  src: url("https://c.s-microsoft.com/static/fonts/segoe-ui/cyrillic/semilight/latest.eot?#iefix") format("embedded-opentype"), url("https://c.s-microsoft.com/static/fonts/segoe-ui/cyrillic/semilight/latest.woff") format("woff"), url("https://c.s-microsoft.com/static/fonts/segoe-ui/cyrillic/semilight/latest.ttf") format("truetype"), url("https://c.s-microsoft.com/static/fonts/segoe-ui/cyrillic/semilight/latest.svg#web") format("svg");
+  font-weight: 300;
+  font-style: normal;
+}
 .arcticmodal-overlay,
 .arcticmodal-container {
   position: fixed;
@@ -1441,7 +1462,7 @@ html {
 }
 
 body {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "wf_segoe-ui", Helvetica, Arial, sans-serif;
   font-size: 14px;
   line-height: 1.42857;
   color: #333333;
@@ -6586,7 +6607,7 @@ button.close {
   position: absolute;
   z-index: 1070;
   display: block;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "wf_segoe-ui", Helvetica, Arial, sans-serif;
   font-style: normal;
   font-weight: normal;
   letter-spacing: normal;
@@ -6708,7 +6729,7 @@ button.close {
   display: none;
   max-width: 276px;
   padding: 1px;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "wf_segoe-ui", Helvetica, Arial, sans-serif;
   font-style: normal;
   font-weight: normal;
   letter-spacing: normal;
@@ -10178,6 +10199,87 @@ body {
 .modal-form .h3 {
   margin-bottom: 20px;
   margin-top: 0;
+}
+
+.manager-title {
+  margin-bottom: 20px;
+}
+.manager-logo {
+  color: #fff;
+  text-align: center;
+  font-size: 3em;
+  line-height: 1;
+  margin-bottom: 30px;
+  margin-top: 20px;
+  font-weight: 300;
+}
+.manager-logo i {
+  color: #f0ad4e;
+}
+.manager-wrapper {
+  height: 100vh;
+}
+.manager-aside {
+  height: 100%;
+  width: 300px;
+  background: #2c3e50;
+  float: left;
+  overflow: hidden;
+  position: relative;
+}
+.manager-aside__content {
+  overflow-y: auto;
+  position: absolute;
+  top: 170px;
+  bottom: 0;
+  right: 0;
+  left: 0;
+}
+.manager-aside__inner {
+  min-height: 600px;
+}
+.manager-content {
+  margin-left: 340px;
+  padding-top: 30px;
+  height: 100%;
+  overflow-y: scroll;
+}
+.manager-title {
+  margin-top: 0;
+  padding-top: 30px;
+}
+.manager-menu {
+  list-style-type: none;
+  margin: 0 0 40px 0;
+  padding: 0;
+}
+.manager-menu__label {
+  display: inline-block;
+  vertical-align: top;
+  padding: 5px 20px;
+  background: rgba(255, 255, 255, 0.3);
+  color: #fff;
+}
+.manager-menu__item {
+  display: block;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0px 1px 5px -4px #fff;
+  width: 100%;
+  padding: 10px 25px 12px 25px;
+  color: #fff;
+  font-weight: 300;
+  font-size: 1.28em;
+  background: #1a252f;
+  cursor: pointer;
+}
+.manager-menu__item.active, .manager-menu__item:active {
+  background-color: #eea236;
+}
+.manager-menu__item--prim {
+  background: #27ae60;
+}
+.manager-menu__item--prim:hover {
+  background-color: #229955;
 }
 
 /*# sourceMappingURL=style.css.map */

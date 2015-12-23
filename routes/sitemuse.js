@@ -100,18 +100,12 @@ function deletePage (arguments) {
 }
 
 function updateItem (arguments)  {
-	var mod = arguments._mod;
-	var _msMap = 'pages';
+	var mod = arguments.group;
 
-	if (mod === 'fragment') {
-		_msMap = 'fragments';
-	};
+	var indx = _.findIndex(MSMAP[mod], { '_id': arguments._id});
 
-	var indx = _.findIndex(MSMAP[_msMap], { '_id': arguments._id});
-
-	MSMAP[_msMap][indx].msid = arguments.msid;
-	MSMAP[_msMap][indx].status = 'sync';
-
+	MSMAP[mod][indx].msid = arguments.msid;
+	MSMAP[mod][indx].status = 'sync';
 
 	fs.writeFileSync(MSMAP_FILE, JSON.stringify(MSMAP, null, 4));
 }
@@ -159,7 +153,7 @@ router.get('/getmapping', function(req, res, next) {
 
 
 router.get('/updateItem', function(req, res, next) {
-  	try  {
+  try  {
 		updateItem (req.query);
 		res.send()
 	} catch (err) {
@@ -190,41 +184,66 @@ router.get('/sync', function(req, res, next) {
   }, next);
 });
 
-function renderMusePage (callback, next) {
-	var path_pages = path.join(VIEWS_PATH, 'pages');
-	var path_fragments = path.join(VIEWS_PATH, 'fragments');
-	var pages = fs.readdirSync(path_pages);
-	var fragments = fs.readdirSync(path_fragments);
+router.post('/syncwithsitemuse', function(req, res, next) {
+ 	// data = req.body.data
+ 	console.log(req.body);
 
+	importData (req.body, function() {
+		console.log("req.body")
+	});
+	
+});
+
+
+
+// ###################################
+// Рендер и экспорт страницы для
+// окружения SiteMuse
+// Вся статика соберется в папке \export
+// Именно от туда копипастим контент
+// на страницы в SiteMuse
+// !!! ОЧЕНЬ ВАЖНО: Сохранять нейминг. Полностью
+
+function renderMusePage (callback, next) {
+	//var path_pages = path.join(VIEWS_PATH, 'pages');
+	//var path_fragments = path.join(VIEWS_PATH, 'fragments');
+
+	var pages = MSMAP.pages;
+	var fragments = MSMAP.fragments;
+
+	// Создаем папки для статики, если оны отсутствуют
 	if (!fs.existsSync(EXPORT_PAGES)) {fs.mkdirSync(EXPORT_PAGES);}
 	if (!fs.existsSync(EXPORT_FRAGMENTS)) {fs.mkdirSync(EXPORT_FRAGMENTS);}
-		
+	
+	// Бежим по массиву страниц	в базе 
+	// и рендерим их
 	async.each(pages, function(page, callback) {
 
-		var _template = path.join(__dirname,  '../views', 'pages', page);
-		var _tmp = path.join(__dirname,  '../views/_tmp', page);
-		var pageData = path.join(__dirname,  '../fixture', 'pages', path.parse(page).name + '.json');
-		var a = fs.readFileSync(_template, 'utf-8');
+		var _preRender = fs.readFileSync(path.join(__dirname,  '../views', 'pages', page.name + '.twig'), 'utf-8');
+		var _tmp = path.join(__dirname,  '../views/_tmp', page.name + '.twig');
 
-		injectFragments(a, page, function() {
-		//	console.log(reD, '============== RE Content');
+		injectFragments(_preRender, page.name, function() {
+			// Передаем контекст из fixture, если он есть
+			if (page.fixture) {
+				var content = swig.renderFile(_tmp, JSON.parse(
+					fs.readFileSync(
+						path.join(__dirname,  '../fixture', 'pages', page.name + '.json'), 
+						'utf8')
+					)
+				);
+			} else {
+				var content = swig.renderFile(_tmp, {});
+			}
 
-			fs.stat(pageData, function(err, stat) {
-	  		if(err == null) {
-		     	var content = swig.renderFile(_tmp, JSON.parse(fs.readFileSync(pageData, 'utf8')));
-		    } else  {
-		      var content = swig.renderFile(_tmp, {});
-		    } 
-		    try {
-		    	
-				 fs.writeFileSync(path.join(EXPORT_PAGES, path.parse(page).name + '.html'), content);
-				 console.log('[SiteMuse]:'.green, (path.parse(page).name + '.html').gray, 'successfully rendered'); 
-				 callback()
-				} catch (err) {
-					callback(err)
-				}
-			});
-		}); 
+			try {
+			 fs.writeFileSync(path.join(EXPORT_PAGES, page.name + '.html'), content);
+			 console.log('[SiteMuse]:'.green, (page.name + '.html').gray, 'successfully rendered'); 
+			 callback();
+			} catch (err) {
+				callback(err)
+			}
+
+		});
 	}, function(err){
 			if ( err ) {
 				console.log(err);
@@ -233,14 +252,27 @@ function renderMusePage (callback, next) {
 			}
 	});
 
+	// Бежим по массиву фрагментов	в базе 
+	// и рендерим их
 	async.each(fragments, function(page, callback) {
-
-		var _template = path.join(__dirname,  '../views', 'fragments', page);
+		var _template = path.join(__dirname,  '../views', 'fragments', page.name + '.twig');
 		var content = swig.renderFile(_template);
-		
+
+
+		if (page.fixture) {
+			var content = swig.renderFile(_tmp, JSON.parse(
+				fs.readFileSync(
+					path.join(__dirname,  '../fixture', 'fragments', page.name + '.json'), 
+					'utf8')
+				)
+			);
+		} else {
+			var content = swig.renderFile(_template);
+		}
+
 		try {
-			 fs.writeFileSync(path.join(EXPORT_FRAGMENTS, path.parse(page).name + '.html'), content);
-			 console.log('[SiteMuse]:'.green, (path.parse(page).name + '.html').gray, 'successfully rendered'); 
+			 fs.writeFileSync(path.join(EXPORT_FRAGMENTS, page.name + '.html'), content);
+			 console.log('[SiteMuse]:'.green, (page.name + '.html').gray, 'successfully rendered'); 
 			 callback()
 			} catch (err) {
 				callback(err)
@@ -253,21 +285,24 @@ function renderMusePage (callback, next) {
 			}
 	});
 	callback();
-}
+};
+
+// ###################################
+// Удаляем страницы/фрагменты которых
+// нет в файле msmspping.json
+// Использовать крайне осторожно! =)
 
 function syncWithMap (callback, next) {
 	checkSyncedFolder('pages');
 	checkSyncedFolder('fragments');
 	callback();
-}
-
+};
 
 function checkSyncedFolder (units) {
 	var path_to_units = path.join(VIEWS_PATH, units);
 	var units_list = fs.readdirSync(path_to_units);
 
 	async.each(units_list, function(page, func) {
-
 		var indx = _.findIndex(MSMAP[units], { 'name': path.parse(page).name});
 		if ( indx === -1) {
 			try{
@@ -278,38 +313,64 @@ function checkSyncedFolder (units) {
 			}
 		}
 	});
-}
-
-/*function _injectFragments (content, p, cb) {
-	var re = new RegExp(/\{\%+\s+include\s+\"..\/fragments\/([^\"]*)"[^\}]*\%\}/g);
-
-	var r = content.replace(re, '$1');
-
-
-	fs.writeFileSync(path.join(__dirname, '../views/_tmp/', p), r)
-	cb()
-}*/
-
-function injectFragments (content, p, cb) {
-
-	//var r = content.replace(re, '$1');
-
-
-
-	async.forEach(MSMAP.fragments, function(n, next) {
-		var re = new RegExp('\\{\\%+\\s+include\\s+\\"..\\/fragments\\/'+ n.name +'.twig([^\\"]*)"[^\\}]*\\%\\}', 'g');
-
-		var replacement = '<mscontentinclude payloadGuid="'+ n._id + '" />';
-
-
-		var result = content.replace(re, replacement);
-		console.log('_________________', re);
-		fs.writeFileSync(path.join(__dirname, '../views/_tmp/', p), result);
-		next()
-	}, function() { console.log('async cb'); cb()})
-
 };
 
-//_injectFragments ()
-//       - regexp 
+// ###################################
+// Реплейсим Твиговский include с фрагментом 
+// на mscom:contentinclude 
+// и записываем в буферный файл
+
+function injectFragments (content, pagename, cb) {
+	console.log(MSMAP.fragments, 'fr');
+	async.forEach(MSMAP.fragments, function(n, next) {
+		var re = new RegExp('\\{\\%+\\s+include\\s+\\"..\\/fragments\\/'+ n.name +'.twig([^\\"]*)"[^\\}]*\\%\\}', 'g');
+		var replacement = '<mscom:contentinclude ajaxrendered="false" md:pageid="'+ n._id + '" instancename="' + n.name + '"></mscom:contentinclude>';
+		var result = content.replace(re, replacement);
+
+		fs.writeFile(path.join(__dirname, '../views/_tmp/', pagename + '.twig'), result, function (err) {
+			next();
+		});
+	}, function() {
+		cb()
+	});
+};
+
+// ####################################
+// Складываем данные с SiteMuse в файлики
+// бежим по файлам и синкаем статику
+function  importData (data, cb) {
+	var _file = path.join(__dirname, '../extd/' + data.contentType + '.js');
+
+	var d = JSON.parse(data.data);
+
+console.log(typeof(d))
+//	console.log(data)
+	// Создаем файлик для данных
+	fs.writeFileSync(_file, data.data);
+
+	async.each(d, function(item, next)	 {
+
+			var a = _.find(MSMAP[data.contentType], function(n) {
+					return n.filename === item.name
+			});
+
+			if (a) {
+				a.msid = item.id;
+				updateItem (a);
+			}
+
+			next()
+
+			//console.log(a)
+
+			//console.log(a, '\n item\n ========================================\n')
+			
+
+			
+	}, function() {
+		cb();
+	});
+
+	
+}		
 module.exports = router;

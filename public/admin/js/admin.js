@@ -6,7 +6,11 @@ var m_site = {
 	images: ko.observableArray(),
 	activeGroup: ko.observable(),
 	activeTab: ko.observable('fragments'),
-	addNewElem: function(d) {
+	currentContentType: ko.observable('pages'),
+	importContentType: ko.observable('pages'),
+	syncedContent: ko.observable(''),
+	addNewElem: function() {
+		var d  =  m_site.currentContentType();
 		var obj = {
 			group: d,
 			name: m_site.newElemName()
@@ -28,19 +32,15 @@ var m_site = {
 		}).done(function(data) {
 			
 			if (data.error) {
-				alert(d.error);
-				return
-			};
-
-			loadItems ();
-			$.arcticmodal('close');
-			m_site.newElemName('');
-
-			if (d === 'fragment') {
-				m_site.activeTab('fragments')
-			} else if (d === 'page')  {
-				m_site.activeTab('pages')
+				$.growl.error({ message: "Ошибка сохранения" });
+			} else {
+				$.growl.notice({ message: "Контент добавлен" });
+				loadItems ();
+				$.arcticmodal('close');
+				m_site.newElemName('');
+				m_site.activeTab(d)
 			}
+			
 		})
 	},
 	removeElem: function(m, d) {
@@ -68,7 +68,7 @@ var m_site = {
 		var item = ko.toJS(d);
 
 		if (!!item.msid) {
-			item._mod = m;
+			//item._mod = m;
 			console.log(item)
 
 			$.ajax({
@@ -98,10 +98,31 @@ var m_site = {
 			method: 'GET',
 			data: item,
 			url: '/sitemuse/removeImage'
-		}).done(function(d) {
-
+		}).done(function(data) {
+			if (data.error) {
+				var msg = 'Картинка ' + d.filename + ' была успешно удалена'
+				$.growl.warning({ message: data.error });
+			} else {
+				var msg = 'Картинка ' + d.filename + ' была успешно удалена'
+				$.growl.notice({ title: "Картинка удалена", message: msg });
+			}
 		});
-	}
+	},
+	importFromSiteMuse: function() {
+		var obj = {};
+		obj.contentType = m_site.importContentType();
+		obj.data = m_site.syncedContent();
+
+		$.ajax({
+			method: 'POST',
+			data: obj,
+			url: '/sitemuse/syncwithsitemuse'
+		}).done(function(data) {});
+
+
+
+	},
+
 }
 
 ko.bindingHandlers.modal = {

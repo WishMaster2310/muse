@@ -1,218 +1,240 @@
 {% extends "./manager_layout.twig" %}
 {% block content %}
+<div class="manager-wrapper">
+	<aside class="manager-aside">
+		<div class="manager-logo">I <i class="fa fa-heart"></i> MS</div>
+			<ul class="manager-menu">
+					<li class="manager-menu__item manager-menu__item--prim" data-bind="modal: '#creatNewFragment'">
+						<i class="fa fa-plus"></i>&emsp;<span class="manager-menu__link"   href="#">Add Content</span>
+					</li>
+				</ul>
+			</ul>
+			<div class="manager-aside__content">
+				<div class="manager-aside__inner">
+					<div class="manager-menu__label">Content</div>
+					<ul class="manager-menu">
+						<li class="manager-menu__item" data-bind="click: function() {m_site.activeTab('pages')}, css: {'active': m_site.activeTab() === 'pages'}">
+							<span class="manager-menu__link" href="#">Pages</span>
+						</li>
 
-<div class="container">
-	<div class="manager-menu">
-		wewe
-	</div>
-	<h1>Управление шаблонами</h1>
+						<li class="manager-menu__item" data-bind="click: function() {m_site.activeTab('fragments')}, css: {'active': m_site.activeTab() === 'fragments'}">
+							<span class="manager-menu__link" href="#">Page Fragments</span>
+						</li>
+						<li class="manager-menu__item" data-bind="click: function() {m_site.activeTab('images')}, css: {'active': m_site.activeTab() === 'images'}">
+							<span class="manager-menu__link" href="#">Images</span>
+						</li>
+					</ul>
 
-	<div class="admin-tabs">
-		<ul class="admin-tabs__menu">
-			<li class="admin-tabs__menu-item" data-bind="click: function() {m_site.activeTab('fragments')}, css: {'active': m_site.activeTab() === 'fragments'}">
-				<span>Фрагменты</span>
-			</li>
-			<li class="admin-tabs__menu-item" data-bind="click: function() {m_site.activeTab('pages')}, css: {'active': m_site.activeTab() === 'pages'}">
-				<span>Страницы</span>
-			</li>
-			<li class="admin-tabs__menu-item" data-bind="click: function() {m_site.activeTab('images')}, css: {'active': m_site.activeTab() === 'images'}">
-				<span>Картинки</span>
-			</li>
-		</ul>
-		<div class="admin-tabs__content">
-			<div class="admin-tabs__content-item" data-bind="visible: m_site.activeTab() === 'fragments'">
-				<div class="admin-tabs-control">
-					<a href="#creatNewFragment" data-bind="modal: '#creatNewFragment', modalOptions1: {closeOnEsc: false, closeOnOverlayClick: false}" class="admin-tabs-btn">Создать фрагмент</a>	
+					<div class="manager-menu__label">Tools</div>
+					<ul class="manager-menu">
+						<li class="manager-menu__item">
+							<i class="fa fa-magic"></i>&emsp;<span class="manager-menu__link" href="#">Export  SiteMuse</span>
+						</li>
+						<li class="manager-menu__item">
+							<i class="fa fa-html5"></i>&emsp;<span class="manager-menu__link" href="#">Export HTML</span>
+						</li>
+					</ul>
+
+					<div class="manager-menu__label">Service</div>
+					<ul class="manager-menu">
+						<li class="manager-menu__item">
+							<i class="fa fa-refresh"></i>&emsp;<span class="manager-menu__link" href="#">Sync MSMAP.json</span>
+						</li>
+						<li class="manager-menu__item" data-bind="modal: '#importFromSiteMuse'">
+							<i class="fa fa-cloud-download"></i>&emsp;<span class="manager-menu__link" href="#">Import from SiteMuse</span>
+						</li>
+					</ul>
 				</div>
-				<div data-bind="foreach: m_site.fragments" class="comp-list">
-					<div class="comp-list__item">
-						<div class="comp-list__item-close"  data-bind="click: function(){m_site.removeElem('fragments', $data.name)}"><i class="fa fa-times"></i></div>
-						<div class="comp-list__item-name">
-							<i class="fa fa-clipboard"></i>&nbsp;&nbsp;<span data-bind="text: name"></span>
-						</div>
-						<div class="comp-list__item-id" >
-							Создан: <span data-bind="text: moment(ctime).format('DD/MM/YY, hh:mm')"></span>
-						</div>
-						<!-- ko if: $data.status != 'sync' -->
-						<div class="input-group">
-					      	<input type="text" class="form-control" placeholder="MSCOM Payload ID" data-bind="value: msid">
-					      	<span class="input-group-btn">
-						    	<button class="btn btn-primary" type="button" data-bind="click: function() {m_site.updmsid($data, 'fragment')}"><i class="fa fa-link"></i></button>
-						    </span>
-					    </div>
-					    <!-- /ko -->
-					    <!-- ko if: $data.status === 'sync' -->
-					    	<div class="comp-list__item-msid" data-bind="text: msid"></div>
-					    <!-- /ko -->
+			</div>
+	</aside>
 
-						<ul class="comp-list__item-tags">
-							<!-- ko if: $data.fixture  -->
-						    	<li class="tag-json">JSON</li>
+	<div class="manager-content">
+		<div class="admin-tabs">
+			<div class="admin-tabs__content">
+				<div class="admin-tabs__content-item" data-bind="visible: m_site.activeTab() === 'fragments'">
+					<h1 class="manager-title">Fragments</h1>
+
+					<div data-bind="foreach: m_site.fragments" class="comp-list">
+						<div class="comp-list__item">
+							<div class="comp-list__item-close"  data-bind="click: function(){m_site.removeElem('fragments', $data.name)}"><i class="fa fa-times"></i></div>
+							<div class="comp-list__item-name">
+								<i class="fa fa-clipboard"></i>&nbsp;&nbsp;<span data-bind="text: name"></span>
+							</div>
+							<div class="comp-list__item-id" >
+								Создан: <span data-bind="text: moment(ctime).format('DD/MM/YY, hh:mm')"></span>
+							</div>
+							<!-- ko if: $data.status != 'sync' -->
+							<div class="input-group">
+						      	<input type="text" class="form-control" placeholder="MSCOM Payload ID" data-bind="value: msid">
+						      	<span class="input-group-btn">
+							    	<button class="btn btn-primary" type="button" data-bind="click: function() {m_site.updmsid($data, 'fragments')}"><i class="fa fa-link"></i></button>
+							    </span>
+						    </div>
 						    <!-- /ko -->
 						    <!-- ko if: $data.status === 'sync' -->
-						    	<li class="tag-sync">Sync</li>
+						    	<div class="comp-list__item-msid" data-bind="text: msid"></div>
 						    <!-- /ko -->
-						    <!-- ko if: $data.status === 'new' -->
-						    	<li class="tag-new">New</li>
-						    <!-- /ko -->
-						</ul>
+
+							<ul class="comp-list__item-tags">
+								<!-- ko if: $data.fixture  -->
+							    	<li class="tag-json">JSON</li>
+							    <!-- /ko -->
+							    <!-- ko if: $data.status === 'sync' -->
+							    	<li class="tag-sync">Sync</li>
+							    <!-- /ko -->
+							    <!-- ko if: $data.status === 'new' -->
+							    	<li class="tag-new">New</li>
+							    <!-- /ko -->
+							</ul>
+						</div>
 					</div>
-				</div>
-			</div>	
-			<div class="admin-tabs__content-item" data-bind="visible: m_site.activeTab() === 'pages'">
-				<div  class="admin-tabs-control">
-					<a href="#creatNewPage"  class="admin-tabs-btn" data-bind="modal: '#creatNewPage'">Создать Страницу</a>	
-				</div>
-				<div data-bind="foreach: m_site.pages" class="comp-list">
-					<div class="comp-list__item">
-						<div class="comp-list__item-close"  data-bind="click: function(){m_site.removeElem('pages', $data.name)}"><i class="fa fa-times"></i></div>
-						<div class="comp-list__item-name">
-							<i class="fa fa-clipboard"></i>&nbsp;&nbsp;<span data-bind="text: name"></span>
-						</div>
-						<div class="comp-list__item-id" >
-							Создан: <span data-bind="text: moment(ctime).format('DD/MM/YY, hh:mm')"></span>
-						</div>
-						<!-- ko if: $data.status != 'sync' -->
-						<div class="input-group">
-					      	<input type="text" class="form-control" placeholder="MSCOM Payload ID" data-bind="value: msid">
-					      	<span class="input-group-btn">
-						    	<button class="btn btn-primary" type="button" data-bind="click: function() {m_site.updmsid($data, 'page')}"><i class="fa fa-link"></i></button>
-						    </span>
-					    </div>
-					    <!-- /ko -->
-					    <!-- ko if: $data.status === 'sync' -->
-					    	<div class="comp-list__item-msid" data-bind="text: msid"></div>
-					    <!-- /ko -->
-						<!--div class="comp-list__item-foot">
-							<a href="#">Изменить</a>&emsp;<a href="#">Удалить</a>
-						</div-->
-						<ul class="comp-list__item-tags">
-							<!-- ko if: $data.fixture  -->
-						    	<li class="tag-json">JSON</li>
+				</div>	
+				<div class="admin-tabs__content-item" data-bind="visible: m_site.activeTab() === 'pages'">
+					<h1 class="manager-title">Page Fragments</h1>
+
+					<div data-bind="foreach: m_site.pages" class="comp-list">
+						<div class="comp-list__item">
+							<div class="comp-list__item-close"  data-bind="click: function(){m_site.removeElem('pages', $data.name)}"><i class="fa fa-times"></i></div>
+							<div class="comp-list__item-name">
+								<i class="fa fa-clipboard"></i>&nbsp;&nbsp;<span data-bind="text: name"></span>
+							</div>
+							<div class="comp-list__item-id" >
+								Создан: <span data-bind="text: moment(ctime).format('DD/MM/YY, hh:mm')"></span>
+							</div>
+							<!-- ko if: $data.status != 'sync' -->
+							<div class="input-group">
+						      	<input type="text" class="form-control" placeholder="MSCOM Payload ID" data-bind="value: msid">
+						      	<span class="input-group-btn">
+							    	<button class="btn btn-primary" type="button" data-bind="click: function() {m_site.updmsid($data, 'pages')}"><i class="fa fa-link"></i></button>
+							    </span>
+						    </div>
 						    <!-- /ko -->
 						    <!-- ko if: $data.status === 'sync' -->
-						    	<li class="tag-sync">Sync</li>
+						    	<div class="comp-list__item-msid" data-bind="text: msid"></div>
 						    <!-- /ko -->
-						    <!-- ko if: $data.status === 'new' -->
-						    	<li class="tag-new">New</li>
-						    <!-- /ko -->
-						</ul>
+							<!--div class="comp-list__item-foot">
+								<a href="#">Изменить</a>&emsp;<a href="#">Удалить</a>
+							</div-->
+							<ul class="comp-list__item-tags">
+								<!-- ko if: $data.fixture  -->
+							    	<li class="tag-json">JSON</li>
+							    <!-- /ko -->
+							    <!-- ko if: $data.status === 'sync' -->
+							    	<li class="tag-sync">Sync</li>
+							    <!-- /ko -->
+							    <!-- ko if: $data.status === 'new' -->
+							    	<li class="tag-new">New</li>
+							    <!-- /ko -->
+							</ul>
 
 
 
+						</div>
 					</div>
-				</div>
-			</div>	
-			<div class="admin-tabs__content-item" data-bind="visible: m_site.activeTab() === 'images'">
-				<div class="comp-list" data-bind="foreach: m_site.images">
-					
-
-					<div class="comp-list__item">
-						<div class="comp-list__item-close" data-bind="click: function() {m_site.removeImage($data)}"><i class="fa fa-times"></i></div>
-						<div class="comp-list__item-name">
-							<i class="fa fa-clipboard"></i>&nbsp;&nbsp;<span data-bind="text: filename"></span>
-						</div>
-
-						<div class="comp-list__item-id">
-							<span data-bind="text: filename"></span>, <span data-bind="text: Math.round(size/1024)"></span>Kb
-						</div>
+				</div>	
+				<div class="admin-tabs__content-item" data-bind="visible: m_site.activeTab() === 'images'">
+					<h1 class="manager-title">Images</h1>
+					<div class="comp-list" data-bind="foreach: m_site.images">
 						
-						<div class="comp-list__item-img">
-							<img src="" style="max-width: 100%" alt="" data-bind="attr: {src: '../images/' + filename}">
-						</div>
-						<!-- ko if: $data.status != 'sync' -->
-						<div class="input-group">
-					      	<input type="text" class="form-control" placeholder="MSCOM Payload ID" data-bind="value: msid">
-					      	<span class="input-group-btn">
-						    	<button class="btn btn-primary" type="button" data-bind="click: function() {m_site.updmsid($data, 'page')}"><i class="fa fa-link"></i></button>
-						    </span>
-					    </div>
-					    <!-- /ko -->
-					    <!-- ko if: $data.status === 'sync' -->
-					    	<div class="comp-list__item-msid" data-bind="text: msid"></div>
-					    <!-- /ko -->
-						<!--div class="comp-list__item-foot">
-							<a href="#">Изменить</a>&emsp;<a href="#">Удалить</a>
-						</div-->
-						<ul class="comp-list__item-tags">
-							<!-- ko if: $data.fixture  -->
-						    	<li class="tag-json">JSON</li>
+
+						<div class="comp-list__item">
+							<div class="comp-list__item-close" data-bind="click: function() {m_site.removeImage($data)}"><i class="fa fa-times"></i></div>
+							<div class="comp-list__item-name">
+								<i class="fa fa-clipboard"></i>&nbsp;&nbsp;<span data-bind="text: filename"></span>
+							</div>
+
+							<div class="comp-list__item-id">
+								<span data-bind="text: filename"></span>, <span data-bind="text: Math.round(size/1024)"></span>Kb
+							</div>
+							
+							<div class="comp-list__item-img">
+								<img src="" style="max-width: 100%" alt="" data-bind="attr: {src: '../images/' + filename}">
+							</div>
+							<!-- ko if: $data.status != 'sync' -->
+							<div class="input-group">
+						      	<input type="text" class="form-control" placeholder="MSCOM Payload ID" data-bind="value: msid">
+						      	<span class="input-group-btn">
+							    	<button class="btn btn-primary" type="button" data-bind="click: function() {m_site.updmsid($data, 'images')}"><i class="fa fa-link"></i></button>
+							    </span>
+						    </div>
 						    <!-- /ko -->
 						    <!-- ko if: $data.status === 'sync' -->
-						    	<li class="tag-sync">Sync</li>
+						    	<div class="comp-list__item-msid" data-bind="text: msid"></div>
 						    <!-- /ko -->
-						    <!-- ko if: $data.status === 'new' -->
-						    	<li class="tag-new">New</li>
-						    <!-- /ko -->
-						</ul>
+							<!--div class="comp-list__item-foot">
+								<a href="#">Изменить</a>&emsp;<a href="#">Удалить</a>
+							</div-->
+							<ul class="comp-list__item-tags">
+								<!-- ko if: $data.fixture  -->
+							    	<li class="tag-json">JSON</li>
+							    <!-- /ko -->
+							    <!-- ko if: $data.status === 'sync' -->
+							    	<li class="tag-sync">Sync</li>
+							    <!-- /ko -->
+							    <!-- ko if: $data.status === 'new' -->
+							    	<li class="tag-new">New</li>
+							    <!-- /ko -->
+							</ul>
+						</div>
 					</div>
-
-				</div>
-
-
-			</div>	
+				</div>	
+			</div>
 		</div>
 	</div>
 </div>
 
 <div style="display: none">
-	<div id="creatNewFragment">
-		<div class="form modal-form">
-			<h3 class="h3">Создать фрагмент</h3>
-			<div class="form-group">
-				<label for="">Имя</label>
-				<input type="text" placeholder="name" name="modelName" class="form-control" data-bind="value: m_site.newElemName">
-			</div>
+			<div id="creatNewFragment">
+				<div class="form modal-form">
+					<h3 class="h3">Создать фрагмент</h3>
+					<div class="form-group">
+						<label for="">Имя</label>
+						<input type="text" placeholder="name" name="modelName" class="form-control" data-bind="value: m_site.newElemName">
+					</div>
+					<div class="form-group">
+						<label for="">Тип</label>
+						<select class="form-control" data-bind="value: m_site.currentContentType">
+							<option value="fragments">Page Fragment</option>
+							<option value="pages">Page</option>
+						</select>
+					</div>
 
-			<div class="form-group">
-				<label>
-					<input type="checkbox" name="" value="" data-bind="checked: m_site.isFixture">
-					Привязать JSON
-				</label>
-			</div>
+					<div class="form-group">
+						<label>
+							<input type="checkbox" name="" value="" data-bind="checked: m_site.isFixture">
+							Привязать JSON
+						</label>
+					</div>
 
-			<div class="form-group">
-				<button class="btn btn-primary" type="button"  data-bind="click: function() {m_site.addNewElem('fragments')}">Создать</button>
-			</div>
-		</div>
-	</div>
-
-	<div id="creatNewPage">
-		<div class="form modal-form">
-			<h3 class="h3">Создать Страницу</h3>
-			<div class="form-group">
-				<label for="">Имя</label>
-				<input type="text" placeholder="name" name="modelName" class="form-control" data-bind="value: m_site.newElemName">
-			</div>
-
-			<div class="form-group">
-				<label>
-					<input type="checkbox" name="" value="" data-bind="checked: m_site.isFixture">
-					Привязать JSON
-				</label>
-			</div>
-
-			<div class="form-group">
-				<button class="btn btn-primary" type="button"  data-bind="click: function() {m_site.addNewElem('pages')}">Создать</button>
-			</div>
-		</div>
-	</div>
-
-	<div id="multerFiles">
-		<div class="form modal-form">
-			<h3 class="h3">Загрузка картинок</h3>
-			<form action="" method="post" id="multerFilesData">
-				<div class="form-group">
-					<label for="">Файлы</label>
-					<input type="file" multiple  name="multerFiles" >
+					<div class="form-group">
+						<button class="btn btn-primary" type="button"  data-bind="click: function() {m_site.addNewElem()}">Создать</button>
+					</div>
 				</div>
+			</div>
 
-				<div class="form-group">
-					<button class="btn btn-primary" type="button"  data-bind="click: function() {m_site.uploadFiles()}">Создать</button>
+			<div id="importFromSiteMuse">
+				<div class="form modal-form">
+					<h3 class="h3">Import from SiteMuse</h3>
+
+
+					<div class="form-group">
+						<label for="">Type</label>
+						<select class="form-control" data-bind="value: m_site.importContentType">
+							<option value="fragments">Page Fragment</option>
+							<option value="pages">Page</option>
+							<option value="images">Image</option>
+						</select>
+					</div>
+
+					<div class="form-group">
+						<label for="">Data</label>
+						<textarea class="form-control" data-bind="value: m_site.syncedContent"></textarea>
+					</div>
+
+					<div class="form-group">
+						<button class="btn btn-primary" type="button"  data-bind="click: function() {m_site.importFromSiteMuse()}">Импортировать</button>
+					</div>
 				</div>
-			</form>
+			</div>
 		</div>
-	</div>
-</div>
-
 {% endblock %}

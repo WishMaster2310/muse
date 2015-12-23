@@ -1,3 +1,4 @@
+@import 'fonts';
 @import 'arcticmodal';
 @import '_bootstrap';
 @import 'font-awesome';
@@ -208,5 +209,109 @@ body {
 	.h3 {
 		margin-bottom: 20px;
 		margin-top: 0;
+	}
+}
+
+
+
+.manager {
+
+	&-title {
+		margin-bottom: 20px;
+	}
+
+	&-logo {
+
+		color: #fff;
+		text-align: center;
+		font-size: 3em;
+		line-height: 1;
+		margin-bottom: 30px;
+		margin-top: 20px;
+		font-weight: 300;
+
+		i  {
+			color: $brand-warning;
+		}
+	}
+
+	&-wrapper {
+		height: 100vh;
+	}
+
+	&-aside {
+		height: 100%;
+		width: 300px;
+		background: #2c3e50;
+		float: left;
+		overflow: hidden;
+		position: relative;
+
+		&__content {
+			overflow-y: auto;
+			position: absolute;
+			top: 170px;
+			bottom: 0;
+			right: 0;
+			left: 0;
+
+		}
+
+		&__inner {
+			min-height: 600px;
+		}
+	}
+
+	&-content {
+		margin-left: 340px;
+		padding-top: 30px;
+		height: 100%;
+		overflow-y: scroll;
+	}
+
+	&-title {
+		margin-top: 0;
+		padding-top: 30px;
+	}
+
+	&-menu {
+		list-style-type: none;
+		margin: 0 0 40px 0;
+		padding: 0;
+
+		&__label {
+			display: inline-block;
+			vertical-align: top;
+			padding: 5px 20px;
+			background: rgba(#fff, .3);
+			color: #fff;
+
+		}
+
+		&__item {
+			display: block;
+			border-bottom: 1px solid rgba(#fff, .3);
+			box-shadow: 0px 1px 5px -4px #fff;
+			width: 100%;
+			padding: 10px 25px 12px 25px;
+			color: #fff;
+			font-weight: 300;
+			font-size: 1.28em;
+			background: darken(#2c3e50, 10%);
+			cursor: pointer;
+
+			&.active,
+			&:active {
+				background-color: darken($brand-warning, 5%);
+			}
+
+			&--prim {
+				background: #27ae60;
+
+				&:hover {
+					background-color: darken(#27ae60, 5%);
+				}
+			}
+		}
 	}
 }
