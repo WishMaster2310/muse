@@ -10,76 +10,31 @@
             "ctime": 1450686517910
         },
         {
-            "name": "eee",
-            "group": "pages",
-            "status": "sync",
-            "fixture": "true",
-            "msid": "erere",
-            "_id": "716608942e5de118ca17a11a4768d2033f1083bc",
-            "ctime": 1450691478235
-        },
-        {
-            "name": "ty56",
+            "name": "new",
             "group": "pages",
             "status": "new",
             "fixture": false,
             "msid": "",
-            "_id": "981b7e46fbf8db7405c31c3631f40ecb24007101",
-            "ctime": 1450784057670
+            "_id": "642e2e33b936e3191ec41e9d9919cbb003977a92",
+            "ctime": 1450946628689
         },
         {
-            "name": "34343434343434",
-            "group": "pages",
-            "status": "sync",
-            "fixture": false,
-            "msid": "6767",
-            "_id": "8af9357c03b92860a8b4b038949f331864ead0d6",
-            "ctime": 1450789078044
-        },
-        {
-            "name": "rrr",
+            "name": "ttt",
             "group": "pages",
             "status": "new",
             "fixture": false,
             "msid": "",
-            "_id": "72746a7a4c6e42f9c9225c1625d8efeae35ae785",
-            "ctime": 1450789172004
+            "_id": "611cbe478a1d95e6100fb0a16eb1b8decb3f7a25",
+            "ctime": 1450946705160
         },
         {
-            "name": "erererererer",
+            "name": "67676",
             "group": "pages",
             "status": "new",
             "fixture": false,
             "msid": "",
-            "_id": "1aec22b1e200b9aa9c2db29b56742cdbe7211e69",
-            "ctime": 1450789642393
-        },
-        {
-            "name": "aasss",
-            "group": "pages",
-            "status": "new",
-            "fixture": false,
-            "msid": "",
-            "_id": "dede0371642ffc1bf524615861ee4d8a748a86ce",
-            "ctime": 1450793313753
-        },
-        {
-            "name": "44444",
-            "group": "pages",
-            "status": "sync",
-            "fixture": false,
-            "msid": "5656",
-            "_id": "fea9cd2b9a762e0e10450ae958429e30f3afe20e",
-            "ctime": 1450793317525
-        },
-        {
-            "name": "565656565656565",
-            "group": "pages",
-            "status": "sync",
-            "fixture": false,
-            "msid": "56565",
-            "_id": "a269996a0e88d6846c34e97146c7e264151f7980",
-            "ctime": 1450880176491
+            "_id": "f7991ba9c49ecfe9a56a8635d793d493298bf7b2",
+            "ctime": 1450946712287
         }
     ],
     "fragments": [
@@ -91,81 +46,95 @@
             "msid": "erer",
             "_id": "7ff447a3c174d85d4ef7044563abec66b691e991",
             "ctime": 1450769727383
-        },
-        {
-            "name": "newfragment",
-            "group": "fragments",
-            "status": "sync",
-            "fixture": false,
-            "msid": "ererererer",
-            "_id": "a810da243181729a895099b425430f30c08999df",
-            "ctime": 1450774603117
-        },
-        {
-            "name": "oldfragment",
-            "group": "fragments",
-            "status": "sync",
-            "fixture": "true",
-            "msid": "ererer",
-            "_id": "a5fbabb5150872b17cdf4dce27fb24b5a18619e6",
-            "ctime": 1450774612615
-        },
-        {
-            "name": "erererer",
-            "group": "fragments",
-            "status": "sync",
-            "fixture": false,
-            "msid": "sdsdsd",
-            "_id": "88216b07b1298a739bea37caa3172b6eeb20e53b",
-            "ctime": 1450784079620
-        },
-        {
-            "name": "5656",
-            "group": "fragments",
-            "status": "sync",
-            "fixture": false,
-            "msid": "54545",
-            "_id": "e030df9c0ef5419b08ddccd41eec76389a85dad4",
-            "ctime": 1450784328608
-        },
-        {
-            "name": "page",
-            "group": "fragments",
-            "status": "sync",
-            "fixture": false,
-            "msid": "544545",
-            "_id": "ca836d377bb6440f4c6d40b04ebafa9f50551b6a",
-            "ctime": 1450792032482
         }
     ],
     "images": [
         {
-            "path": "d:\\projects\\sitemuse\\public\\images\\animation5.gif",
-            "filename": "animation5.gif",
-            "size": 155899,
-            "msid": "",
-            "id": "1426af48980b85756498afaaa87d994972b51116"
+            "path": "d:\\projects\\sitemuse\\public\\images\\vidp2.jpg",
+            "name": "vidp2.jpg",
+            "size": 43442,
+            "msid": "fac305b8-3dda-45ec-a1eb-c32d4a81756a",
+            "id": "0ffdbabe5074a0036c9e0ce8cebe1270de2565de",
+            "status": "sync"
         },
         {
-            "path": "d:\\projects\\sitemuse\\public\\images\\vk.png",
-            "filename": "vk.png",
-            "size": 2673,
-            "msid": "",
-            "id": "f1cf8154a657c1f0116a9b771fb728268f03bae0"
+            "path": "d:\\projects\\sitemuse\\public\\images\\prizesticker.jpg",
+            "name": "prizesticker.jpg",
+            "size": 22660,
+            "msid": "c0c87706-0a93-4ef6-adae-5b989ba42e13",
+            "id": "6f6b18ecf652952ddaaf63bf0e76dcc334951ba4",
+            "status": "sync"
         },
         {
-            "path": "d:\\projects\\sitemuse\\public\\images\\winner-bg.png",
-            "filename": "winner-bg.png",
-            "size": 50759,
+            "path": "d:\\projects\\sitemuse\\public\\images\\prizetablet.png",
+            "name": "prizetablet.png",
+            "size": 137222,
+            "msid": "439e0193-3974-4ec5-a327-f8c07648db3e",
+            "id": "a219bed1d9e9dc95f15d1b1b4d126ffc1bd252e0",
+            "status": "sync"
+        },
+        {
+            "path": "d:\\projects\\sitemuse\\public\\images\\vidp1.jpg",
+            "name": "vidp1.jpg",
+            "size": 51399,
+            "msid": "1fc75400-f8d1-428f-ab91-438fcd5b29af",
+            "id": "2d361f0eda6962e76fb24f52d36b7e388d2bfe35",
+            "status": "sync"
+        },
+        {
+            "path": "d:\\projects\\sitemuse\\public\\images\\vidp3.jpg",
+            "name": "vidp3.jpg",
+            "size": 46823,
+            "msid": "ff16cab3-ad9c-42bb-ae14-ca822002cd35",
+            "id": "bcd5acb265f115f738429c64c0acb3c3da47fece",
+            "status": "sync"
+        },
+        {
+            "path": "d:\\projects\\sitemuse\\public\\images\\preloader.gif",
+            "name": "preloader.gif",
+            "size": 10545,
+            "msid": "4dad56d2-7c86-4fae-8fdd-cfe163ce53e9",
+            "id": "6b5ffbf2bb6d8bd3cabdd1b30dda69933fd57ba8",
+            "status": "sync"
+        },
+        {
+            "path": "d:\\projects\\sitemuse\\public\\images\\prize1.gif",
+            "name": "prize1.gif",
+            "size": 123261,
             "msid": "",
-            "id": "c3dafc68da80f95d8b2a6ca255a034ae2d204b9e"
+            "id": "1d8a7bda3c16ebe361e9cf4be578f9dd41adb4ec"
+        },
+        {
+            "path": "d:\\projects\\sitemuse\\public\\images\\prize2.jpg",
+            "name": "prize2.jpg",
+            "size": 129142,
+            "msid": "2ef3fb5f-e6e1-4130-82ee-d654398edb57",
+            "id": "99aa5885c383839f4b5985338285d53c9401a1bc",
+            "status": "sync"
+        },
+        {
+            "path": "d:\\projects\\sitemuse\\public\\images\\prizes.jpg",
+            "name": "prizes.jpg",
+            "size": 222822,
+            "msid": "b2d97a52-19af-42f5-8568-4ca24d294abb",
+            "id": "306163c37900b1db128df7a01939517b32af065b",
+            "status": "sync"
+        },
+        {
+            "path": "d:\\projects\\sitemuse\\public\\images\\vidp4.jpg",
+            "name": "vidp4.jpg",
+            "size": 42549,
+            "msid": "365285ac-1f78-4dad-907f-3f61390045d0",
+            "id": "92aefbb4bc9a76cd6f1ae3028d88d0d2b9ebaa23",
+            "status": "sync"
         },
         {
             "path": "d:\\projects\\sitemuse\\public\\images\\wip1.png",
-            "filename": "wip1.png",
+            "name": "wip1.png",
             "size": 17267,
-            "msid": "",
-            "id": "45a7e86982863e98215cd163a5d058b12a3c6901"
+            "msid": "ab745f96-50fb-410c-9028-82e21980759c",
+            "id": "3f15e32d93c263368c554b0a0010801c25bd1fbc",
+            "status": "sync"
         }
     ]
 }

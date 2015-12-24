@@ -38,7 +38,7 @@ var m_site = {
 				loadItems ();
 				$.arcticmodal('close');
 				m_site.newElemName('');
-				m_site.activeTab(d)
+				m_site.activeTab(d);
 			}
 			
 		})
@@ -93,7 +93,8 @@ var m_site = {
 			path: d.path
 		};
 
-		m_site.images.remove(d)
+		m_site.images.remove(d);
+
 		$.ajax({
 			method: 'GET',
 			data: item,
@@ -118,10 +119,16 @@ var m_site = {
 			data: obj,
 			url: '/sitemuse/syncwithsitemuse'
 		}).done(function(data) {});
-
-
-
 	},
+
+	exportMuse: function() {
+		$.ajax({
+			method: 'GET',
+			url: '/sitemuse/export'
+		}).done(function(d) {
+			$.growl.notice({ title: "Export", message: 'Успешно экспортированы шаблоны' });
+		});
+	}
 
 }
 

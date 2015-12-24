@@ -27,7 +27,7 @@
 
 					<div class="manager-menu__label">Tools</div>
 					<ul class="manager-menu">
-						<li class="manager-menu__item">
+						<li class="manager-menu__item" data-bind="click: function() {m_site.exportMuse()}">
 							<i class="fa fa-magic"></i>&emsp;<span class="manager-menu__link" href="#">Export  SiteMuse</span>
 						</li>
 						<li class="manager-menu__item">
@@ -132,23 +132,22 @@
 						</div>
 					</div>
 				</div>	
+				
 				<div class="admin-tabs__content-item" data-bind="visible: m_site.activeTab() === 'images'">
 					<h1 class="manager-title">Images</h1>
 					<div class="comp-list" data-bind="foreach: m_site.images">
-						
-
 						<div class="comp-list__item">
 							<div class="comp-list__item-close" data-bind="click: function() {m_site.removeImage($data)}"><i class="fa fa-times"></i></div>
 							<div class="comp-list__item-name">
-								<i class="fa fa-clipboard"></i>&nbsp;&nbsp;<span data-bind="text: filename"></span>
+								<i class="fa fa-clipboard"></i>&nbsp;&nbsp;<span data-bind="text: name"></span>
 							</div>
 
 							<div class="comp-list__item-id">
-								<span data-bind="text: filename"></span>, <span data-bind="text: Math.round(size/1024)"></span>Kb
+								<span data-bind="text: name"></span>, <span data-bind="text: Math.round(size/1024)"></span>Kb
 							</div>
 							
 							<div class="comp-list__item-img">
-								<img src="" style="max-width: 100%" alt="" data-bind="attr: {src: '../images/' + filename}">
+								<img src="" style="max-width: 100%" alt="" data-bind="attr: {src: '../images/' + name}">
 							</div>
 							<!-- ko if: $data.status != 'sync' -->
 							<div class="input-group">

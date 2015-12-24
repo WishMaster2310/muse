@@ -1,0 +1,9 @@
+{% macro image(export, name, value='') %}
+<div class="field">
+	{{ name }} {{ value }}
+	{% if export %}Это Экспорт
+	{% else %}
+	    Это НЕ Экспорт
+	{% endif %}
+</div>
+{% endmacro %}

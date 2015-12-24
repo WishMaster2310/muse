@@ -6,16 +6,26 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var Twig = require('twig');
 var twig = Twig.twig;
+var swig = require('swig');
 var routes = require('./routes/index');
 var users = require('./routes/users');
+var nunjucks = require('nunjucks');
 var sitemuse = require('./routes/sitemuse');
 var app = express();
 var fs = require('fs');
 var _ = require('lodash')
-
-// view engine setup
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'twig');
+// view engine setup
+
+nunjucks.configure('views', {
+    autoescape: true,
+    express: app
+});
+
+//app.set('view engine', 'twig');
+app.set('view engine', 'html');
+//app.engine('html', swig.renderFile);
+
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -50,7 +60,7 @@ app.all('*', function(req, res, next) {
   };  
 
   if (!!targetPage) {
-    res.render('pages/' + targetPage, d)
+    res.render('pages/' + targetPage, {Page: d, Export: false})
   } else {
     throw new Error('404 Page '+ reqPath + ' Not Found')
   }

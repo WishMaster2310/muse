@@ -15,9 +15,10 @@ function initWatcher () {
       
       
       if (_.findIndex(MSMAP.images, { 'path': p }) === -1) {
+        
         MSMAP.images.push({
           path: p,
-          filename: path.basename(p),
+          name: path.basename(p),
           size: stats.size,
           msid: "",
           id: crypto.randomBytes(20).toString('hex')
@@ -37,8 +38,6 @@ function initWatcher () {
       });
 
       fs.writeFileSync(MSMAP_FILE, JSON.stringify(MSMAP, null, 4));
-
-      console.log('File', path, 'has been removed');
     })
     .on('error', function(error) {console.error('Error happened', error);});
 };

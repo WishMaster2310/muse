@@ -1,7 +1,8 @@
 var express = require('express');
 var router = express.Router();
-var swig = require('swig');
-var twig = require('twig');
+//var swig = require('swig');
+//var Twig = require('twig');
+//var twig = Twig.twig;
 
 var fs = require('fs');
 var _ = require('lodash');
@@ -10,7 +11,7 @@ var path = require('path');
 var crypto = require('crypto'); 
 var async = require('async');
 var colors = require('colors');
-
+var nunjucks = require('nunjucks');
 var IMAGES_DIR = './public/images/';
 var MSMAP_FILE = path.join(__dirname, "../fixture/msmapping.json");
 var MSMAP = require(MSMAP_FILE);
@@ -28,7 +29,16 @@ var Page = function(arguments) {
 	this.msid = arguments.msid || '';
 	this._id = crypto.randomBytes(20).toString('hex');
 	this.ctime = Date.now();
-}
+};
+
+var MSImage = function(arguments) {
+	this.name = arguments.name;
+	this.size = 0;
+	this.path = null;
+	this.msid = arguments.msid || '';
+	this._id = crypto.randomBytes(20).toString('hex');
+};
+
 
 function createPage (page) {
 	var itemGroup = page.group;
@@ -174,7 +184,7 @@ router.get('/removeImage', function(req, res, next) {
 
 router.get('/export', function(req, res, next) {
   renderMusePage(function() {
-  	res.redirect('/sitemuse')
+  	res.send({})
   }, next);
 });
 
@@ -186,7 +196,7 @@ router.get('/sync', function(req, res, next) {
 
 router.post('/syncwithsitemuse', function(req, res, next) {
  	// data = req.body.data
- 	console.log(req.body);
+ //	console.log(req.body);
 
 	importData (req.body, function() {
 		console.log("req.body")
@@ -210,6 +220,7 @@ function renderMusePage (callback, next) {
 
 	var pages = MSMAP.pages;
 	var fragments = MSMAP.fragments;
+	var EXPORT = 'muse'
 
 	// Создаем папки для статики, если оны отсутствуют
 	if (!fs.existsSync(EXPORT_PAGES)) {fs.mkdirSync(EXPORT_PAGES);}
@@ -222,17 +233,15 @@ function renderMusePage (callback, next) {
 		var _preRender = fs.readFileSync(path.join(__dirname,  '../views', 'pages', page.name + '.twig'), 'utf-8');
 		var _tmp = path.join(__dirname,  '../views/_tmp', page.name + '.twig');
 
+		
 		injectFragments(_preRender, page.name, function() {
 			// Передаем контекст из fixture, если он есть
 			if (page.fixture) {
-				var content = swig.renderFile(_tmp, JSON.parse(
-					fs.readFileSync(
-						path.join(__dirname,  '../fixture', 'pages', page.name + '.json'), 
-						'utf8')
-					)
-				);
+
+				var locals = JSON.parse(fs.readFileSync(path.join(__dirname,  '../fixture', 'pages', page.name + '.json'), 'utf8') )
+				var content = nunjucks.render(_tmp, {Page: locals, Export: EXPORT});
 			} else {
-				var content = swig.renderFile(_tmp, {});
+				var content = nunjucks.render(_tmp, {});
 			}
 
 			try {
@@ -256,18 +265,18 @@ function renderMusePage (callback, next) {
 	// и рендерим их
 	async.each(fragments, function(page, callback) {
 		var _template = path.join(__dirname,  '../views', 'fragments', page.name + '.twig');
-		var content = swig.renderFile(_template);
+		var content = nunjucks.render(_template);
 
 
 		if (page.fixture) {
-			var content = swig.renderFile(_tmp, JSON.parse(
+			var content = nunjucks.render(_tmp, JSON.parse(
 				fs.readFileSync(
 					path.join(__dirname,  '../fixture', 'fragments', page.name + '.json'), 
 					'utf8')
 				)
 			);
 		} else {
-			var content = swig.renderFile(_template);
+			var content = nunjucks.render(_template);
 		}
 
 		try {
@@ -321,10 +330,11 @@ function checkSyncedFolder (units) {
 // и записываем в буферный файл
 
 function injectFragments (content, pagename, cb) {
-	console.log(MSMAP.fragments, 'fr');
-	async.forEach(MSMAP.fragments, function(n, next) {
+	//console.log(MSMAP.fragments, 'fr');
+
+	async.each(MSMAP.fragments, function(n, next) {
 		var re = new RegExp('\\{\\%+\\s+include\\s+\\"..\\/fragments\\/'+ n.name +'.twig([^\\"]*)"[^\\}]*\\%\\}', 'g');
-		var replacement = '<mscom:contentinclude ajaxrendered="false" md:pageid="'+ n._id + '" instancename="' + n.name + '"></mscom:contentinclude>';
+		var replacement = '<mscom:contentinclude ajaxrendered=\"false\" md:pageid=\"'+ n._id + '\" instancename=\"' + n.name + '\"></mscom:contentinclude>';
 		var result = content.replace(re, replacement);
 
 		fs.writeFile(path.join(__dirname, '../views/_tmp/', pagename + '.twig'), result, function (err) {
@@ -335,42 +345,46 @@ function injectFragments (content, pagename, cb) {
 	});
 };
 
+/*function injectImages () {
+	async.each(MSMAP.pages, function(page, next) {
+			var re = new RegExp('');
+	});	
+};*/
+
 // ####################################
 // Складываем данные с SiteMuse в файлики
 // бежим по файлам и синкаем статику
 function  importData (data, cb) {
 	var _file = path.join(__dirname, '../extd/' + data.contentType + '.js');
+	var importData = JSON.parse(data.data);
+	var ctx = data.contentType;
 
-	var d = JSON.parse(data.data);
-
-console.log(typeof(d))
-//	console.log(data)
 	// Создаем файлик для данных
 	fs.writeFileSync(_file, data.data);
 
-	async.each(d, function(item, next)	 {
+	async.each(importData, function(item, next)	 {
 
-			var a = _.find(MSMAP[data.contentType], function(n) {
-					return n.filename === item.name
+			var a = _.find(MSMAP[ctx], function(n) {
+					return n.name === item.name
 			});
 
 			if (a) {
 				a.msid = item.id;
-				updateItem (a);
+				a.status = 'sync';
+
+				fs.writeFile(MSMAP_FILE, JSON.stringify(MSMAP, null, 4), function(err) {
+					if (err) {
+						throw err
+					} else {
+						next();
+					}
+				});
+			} else {
+
+				next();
 			}
-
-			next()
-
-			//console.log(a)
-
-			//console.log(a, '\n item\n ========================================\n')
-			
-
-			
 	}, function() {
 		cb();
 	});
-
-	
 }		
 module.exports = router;
