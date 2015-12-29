@@ -19,6 +19,7 @@ var VIEWS_PATH = './views/';
 var FIXTURE_PATH = './fixture/';
 var EXPORT_PAGES = path.join(__dirname,  '../export/pages');
 var EXPORT_FRAGMENTS = path.join(__dirname,  '../export/fragments');
+var $ = require('cheerio');
 
 var Page = function(arguments) {
 	this.name = arguments.name;
@@ -236,10 +237,13 @@ function renderMusePage (callback, next) {
 		
 		injectFragments(_preRender, page.name, function() {
 			// Передаем контекст из fixture, если он есть
+
+			//var img = $(_tmp).find('img');
+			//console.log(img, '- cherio result image');
 			if (page.fixture) {
 
 				var locals = JSON.parse(fs.readFileSync(path.join(__dirname,  '../fixture', 'pages', page.name + '.json'), 'utf8') )
-				var content = nunjucks.render(_tmp, {Page: locals, Export: EXPORT});
+				var content = nunjucks.render(_tmp, {Page: locals, Images: MSMAP.images, Export: EXPORT});
 			} else {
 				var content = nunjucks.render(_tmp, {});
 			}
@@ -335,21 +339,20 @@ function injectFragments (content, pagename, cb) {
 	async.each(MSMAP.fragments, function(n, next) {
 		var re = new RegExp('\\{\\%+\\s+include\\s+\\"..\\/fragments\\/'+ n.name +'.twig([^\\"]*)"[^\\}]*\\%\\}', 'g');
 		var replacement = '<mscom:contentinclude ajaxrendered=\"false\" md:pageid=\"'+ n._id + '\" instancename=\"' + n.name + '\"></mscom:contentinclude>';
-		var result = content.replace(re, replacement);
+		if(re.test(content)) {
+			var result = content.replace(re, replacement);
 
-		fs.writeFile(path.join(__dirname, '../views/_tmp/', pagename + '.twig'), result, function (err) {
+			fs.writeFile(path.join(__dirname, '../views/_tmp/', pagename + '.twig'), result, function (err) {
+				console.log(err)
+				next();
+			})
+		} else {
 			next();
-		});
+		}
 	}, function() {
 		cb()
 	});
 };
-
-/*function injectImages () {
-	async.each(MSMAP.pages, function(page, next) {
-			var re = new RegExp('');
-	});	
-};*/
 
 // ####################################
 // Складываем данные с SiteMuse в файлики

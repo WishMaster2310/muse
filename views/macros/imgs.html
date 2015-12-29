@@ -1,9 +1,30 @@
-{% macro image(export, name, value='') %}
-<div class="field">
-	{{ name }} {{ value }}
-	{% if export %}Это Экспорт
-	{% else %}
-	    Это НЕ Экспорт
-	{% endif %}
-</div>
+{# 
+
+	list of ms attrs
+	spritegroup="default" 
+	sprite="false" 
+	noheightwidth="false" 
+	usedatasource="false" 
+	md:payloadguid="1fc75400-f8d1-428f-ab91-438fcd5b29af"
+	instancename="test" 
+	alt="test" 
+	title="test" 
+	classoverride="test" 
+	height="34" 
+	width="34"     #}
+
+{% macro image(export, images, src="", class="", datasrc='false') %}
+	{% set msid = "" %}
+
+	{% for i in images %}
+	 {% if i.name == src %}
+			{% set msid = i.msid %}
+	 {% endif %}
+	{% endfor %}
+
+	{% if export == 'muse' -%}
+		<mscom:image spritegroup="default" sprite="false" noheightwidth="true" {% if class %}classoverride="{{ class }}"{% endif %} usedatasource="{{ datasrc }}" md:payloadguid="{{ msid }}" alt=""></mscom:image>
+	{%- else -%}
+	    <img src="../images/{{ src }}" alt="" class="{{ class }}" >
+	{%- endif -%}
 {% endmacro %}

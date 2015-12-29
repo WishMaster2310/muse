@@ -1,4 +1,6 @@
-{% import "macros/imgs.html" as ms %}
+{% if Export == 'muse' %}
+    {% block content %}{% endblock %}
+    {% else %}
 <html>
     <head>
         <meta charset="utf-8">
@@ -9,7 +11,8 @@
         <link rel="author" href="humans.txt">
     </head>
     <body>
-      	<h1>666Hellsdds sdsd1sdsdsdsds</h1>
+      
         {% block content %}{% endblock %}
     </body>
 </html>
+{% endif %}
