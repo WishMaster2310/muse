@@ -15,11 +15,13 @@ var fixtures = fs.readdirSync(FIXTURES_FRAGMENTS_DIR);
 var args = process.argv.slice(2);
 
 
-var itemManager =  {
+var itemManager = {
 
 	add: function(mod, name, flag) {
 
-		var _fixPath = FIXTURES_PAGES_DIR, _viewsPath = VIEWS_PAGES_DIR, _msMap = 'pages';
+		var _fixPath = FIXTURES_PAGES_DIR,
+			_viewsPath = VIEWS_PAGES_DIR,
+			_msMap = 'pages';
 
 		if (mod === 'fragment') {
 			_fixPath = FIXTURES_FRAGMENTS_DIR;
@@ -33,42 +35,46 @@ var itemManager =  {
 		};
 
 		fs.writeFile(_viewsPath + name + '.twig', '', function(err) {
-			if(err) {
-			    return console.log(err);
+			if (err) {
+				return console.log(err);
 			}
 
-			
+
 			console.log(mod + ' ' + name + '.twig  was succesfully created');
 
-			if (_.findIndex(MSMAP[_msMap], { 'name': name }) < 0) {
+			if (_.findIndex(MSMAP[_msMap], {
+					'name': name
+				}) < 0) {
 				MSMAP[_msMap].push(mapItem);
-				fs.writeFile(MSMAP_FILE, JSON.stringify(MSMAP, null, 4), function (err) {
-				  if (err) return console.log(err);
+				fs.writeFile(MSMAP_FILE, JSON.stringify(MSMAP, null, 4), function(err) {
+					if (err) return console.log(err);
 				});
 			} else {
-				
+
 				console.log('this item allready exist in MSMAPFILE');
 			}
 
-			
+
 		});
 
 		if (flag == '-f') {
 
 			fs.writeFile(_fixPath + name + '.json', '{"name": ""}', function(err) {
-		
-				if(err) {
-			        return console.log(err);
-			    }
 
-			    console.log(mod + ' ' + name + '.json  was succesfully created');
+				if (err) {
+					return console.log(err);
+				}
+
+				console.log(mod + ' ' + name + '.json  was succesfully created');
 			});
 		};
 
 	},
 
 	remove: function(mod, name) {
-		var _fixPath = FIXTURES_PAGES_DIR, _viewsPath = VIEWS_PAGES_DIR, _msMap = 'pages';
+		var _fixPath = FIXTURES_PAGES_DIR,
+			_viewsPath = VIEWS_PAGES_DIR,
+			_msMap = 'pages';
 
 		if (mod === 'fragment') {
 			_fixPath = FIXTURES_FRAGMENTS_DIR;
@@ -78,41 +84,41 @@ var itemManager =  {
 
 
 		fs.unlink(_viewsPath + name + '.twig', function(err) {
-		
-			if(err) {
-		        return console.log(err);
-		    }
 
-		    _.remove(MSMAP[_msMap], function(n) {
+			if (err) {
+				return console.log(err);
+			}
+
+			_.remove(MSMAP[_msMap], function(n) {
 				return n.name = name
 			});
 
-		    fs.writeFile(MSMAP_FILE, JSON.stringify(MSMAP, null, 4), function (err) {
-			  if (err) return console.log(err);
+			fs.writeFile(MSMAP_FILE, JSON.stringify(MSMAP, null, 4), function(err) {
+				if (err) return console.log(err);
 			});
 
-		    console.log(mod + ' ' + name + '.twig  was succesfully removed');
+			console.log(mod + ' ' + name + '.twig  was succesfully removed');
 		});
 
 		fs.unlink(_fixPath + name + '.json', function(err) {
-	
-			if(err) {
-		        return console.log('no-fixture');
-		    }
 
-		    console.log(mod + ' ' + name + '.json  was succesfully removed');
+			if (err) {
+				return console.log('no-fixture');
+			}
+
+			console.log(mod + ' ' + name + '.json  was succesfully removed');
 		});
 	}
-}	
+}
 
 if (args[0] === 'add') {
 
 	itemManager.add(args[1], args[2], args[3]);
 
-} else if(args[0] === 'remove') {
+} else if (args[0] === 'remove') {
 
 	itemManager.remove(args[1], args[2]);
 
 } else {
-	console.log("Use: add "+ args[1] +  " " + args[2] + " or remove " + args[1] +  " " + args[2] )
+	console.log("Use: add " + args[1] + " " + args[2] + " or remove " + args[1] + " " + args[2])
 }

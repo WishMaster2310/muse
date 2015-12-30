@@ -20,6 +20,7 @@ var FIXTURE_PATH = './fixture/';
 var EXPORT_PAGES = path.join(__dirname,  '../export/pages');
 var EXPORT_FRAGMENTS = path.join(__dirname,  '../export/fragments');
 var cheerio = require('cheerio');
+//var Entities = require('html-entities').AllHtmlEntities;
 
 var Page = function(arguments) {
   this.name = arguments.name;
@@ -249,7 +250,14 @@ function renderMusePage (callback, next) {
               var content = nunjucks.render(_tmp, {Export: EXPORT});
             }
 
-            fs.writeFileSync(path.join(EXPORT_PAGES, page.name + '.html'), content);
+
+           // var entities = new Entities();
+
+            console.log('===========================');
+           // console.log(entities.decode(content));
+            console.log('===========================');
+
+            fs.writeFileSync(path.join(EXPORT_PAGES, page.name + '.html'), content, 'utf-8');
             console.log('[SiteMuse]:'.green, (page.name + '.html').gray, 'successfully rendered'); 
             cb();
 
@@ -292,20 +300,27 @@ function renderMusePage (callback, next) {
 
               $('img').each( function(index, el) {
                 var src = $(el).attr('src') ;
+                var classes = $(el).attr('class');
                 var filename = path.basename(src);
                 var alt = $(el).attr('alt') || '';
                 var datasrc = $(el).data('src')? true : false;
-                console.log()
 
+                console.log(typeof(classes), classes + ' dd')
                 var msid = _.result(_.find(MSMAP.images, function(item) {
                   return item.name === filename;
                 }), 'msid');
 
 
-                var replacement = '<mscom:image spritegroup="default" sprite="false" noheightwidth="true" md:payloadguid=' + msid + ' alt=' + alt + ' ></mscom:image>'
+                var replacement = '<mscom:image' + 
+                                    ' spritegroup="default"' + 
+                                    ' sprite="false" noheightwidth="true"' +
+                                    ' md:payloadguid=' + msid +
+                                    ' alt=' + alt + 
+                                    ' usedatasource=' + datasrc + 
+                                    ' classoverride="' + classes  + '"' +
+                                  ' ></mscom:image>'
+
                 $(el).replaceWith(replacement);
-                //< usedatasource="false" >
-           
               });
 
               fs.writeFile(path.join(EXPORT_PAGES, p), $.html(), function(err) {
