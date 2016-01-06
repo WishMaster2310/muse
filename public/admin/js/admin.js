@@ -128,6 +128,21 @@ var m_site = {
 		}).done(function(d) {
 			$.growl.notice({ title: "Export", message: 'Успешно экспортированы шаблоны' });
 		});
+	},
+
+	syncWithMap: function() {
+		$.ajax({
+			method: 'GET',
+			url: '/sitemuse/sync'
+		}).done(function(d) {
+			if (d.error) {
+				$.growl.notice({ title: "Export", message: d.error.message });
+
+			} else {
+				$.growl.notice({ title: "Export", message: 'Успешно экспортированы шаблоны' });
+			}
+			
+		});
 	}
 
 }

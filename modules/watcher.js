@@ -14,14 +14,14 @@ function initWatcher () {
     .on('add', function(p, stats) {
       
       
-      if (_.findIndex(MSMAP.images, { 'path': p }) === -1) {
+      if (_.findIndex(MSMAP.images, { 'name': path.basename(p)}) === -1) {
         
         MSMAP.images.push({
           path: p,
           name: path.basename(p),
           size: stats.size,
           msid: "",
-          id: crypto.randomBytes(20).toString('hex')
+          _id: crypto.randomBytes(20).toString('hex')
         });
 
         fs.writeFileSync(MSMAP_FILE, JSON.stringify(MSMAP, null, 4));
@@ -30,11 +30,11 @@ function initWatcher () {
 
       
     })
-    .on('change', function(path) {console.log('File', path, 'has been changed');})
-    .on('unlink', function(path) {
+    .on('change', function(p) {console.log('File', p, 'has been changed');})
+    .on('unlink', function(p) {
 
       _.remove(MSMAP.images, function(n) {
-        return n.path === path;
+        return n.name === path.basename(p);
       });
 
       fs.writeFileSync(MSMAP_FILE, JSON.stringify(MSMAP, null, 4));

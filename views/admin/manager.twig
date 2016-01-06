@@ -37,7 +37,7 @@
 
 					<div class="manager-menu__label">Service</div>
 					<ul class="manager-menu">
-						<li class="manager-menu__item">
+						<li class="manager-menu__item" data-bind="click: function() {m_site.syncWithMap()}" >
 							<i class="fa fa-refresh"></i>&emsp;<span class="manager-menu__link" href="#">Sync MSMAP.json</span>
 						</li>
 						<li class="manager-menu__item" data-bind="modal: '#importFromSiteMuse'">
