@@ -90,8 +90,10 @@ var m_site = {
 	removeImage: function(d){
 
 		var item = {
-			path: d.path
+			_id: d._id
 		};
+
+		console.log(d, "d")
 
 		m_site.images.remove(d);
 
@@ -101,11 +103,12 @@ var m_site = {
 			url: '/sitemuse/removeImage'
 		}).done(function(data) {
 			if (data.error) {
-				var msg = 'Картинка ' + d.filename + ' была успешно удалена'
-				$.growl.warning({ message: data.error });
+				var msg = 'не удалось удалить картинку ' + d.name + '\n Зри в консоль';
+				console.log(data.error);
+				$.growl.warning({title: "Случилась беда :(",  message: data.error });
 			} else {
-				var msg = 'Картинка ' + d.filename + ' была успешно удалена'
-				$.growl.notice({ title: "Картинка удалена", message: msg });
+				var msg = 'Картинка ' + d.name + '\nбыла успешно удалена'
+				$.growl.notice({ title: "Это победа!", message: msg });
 			}
 		});
 	},

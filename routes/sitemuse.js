@@ -5,7 +5,7 @@ var muse = require('./api');
 
 /* GET API page. */
 router.get('/', function(req, res, next) {
-	res.render('admin/manager.twig', {
+	res.render('admin/manager.html', {
 		title: 'Sitemuse'
 	});
 });
@@ -53,14 +53,19 @@ router.get('/updateItem', function(req, res, next) {
 
 
 router.get('/removeImage', function(req, res, next) {
-	try {
+	/*try {
 		fs.unlinkSync(req.query.path);
+		console.log(req.query.path)
 		res.send({});
 	} catch (err) {
 		res.send({
 			error: err
 		});
-	}
+	}*/
+	console.log(req.query, '====================')
+	muse.removeImage(res, req.query, function(err) {
+		res.send({err: err})
+	});
 });
 
 router.get('/export', function(req, res, next) {

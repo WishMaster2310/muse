@@ -8,18 +8,15 @@ var async = require('async');
 var colors = require('colors');
 var nunjucks = require('nunjucks');
 var cheerio = require('cheerio');
-
+var muse = {};
 var IMAGES_DIR = './public/images/';
 var MSMAP_FILE = path.join(__dirname, "../fixture/msmapping.json");
-var MSMAP = require(MSMAP_FILE);
+var MSMAP = muse.db = require(MSMAP_FILE);
 var VIEWS_PATH = './views/';
 var FIXTURE_PATH = './fixture/';
 var EXPORT_PATH = path.join(__dirname, '../export/');
 var EXPORT_PAGES = path.join(__dirname, '../export/pages');
 var EXPORT_FRAGMENTS = path.join(__dirname, '../export/fragments');
-
-var muse = {};
-muse.db = MSMAP;
 
 muse.notify = function(str) {
   console.log('[SiteMuse]:'.green, str);
@@ -51,12 +48,12 @@ muse.Img = function(arguments) {
 
 muse.createPage = function(page) {
     var itemGroup = page.group;
-    var viewsPath = path.join(VIEWS_PATH, itemGroup, page.name + '.twig');
+    var viewsPath = path.join(VIEWS_PATH, itemGroup, page.name + '.html');
     var fixturePath = path.join(FIXTURE_PATH, itemGroup, page.name + '.json');
-    var viewsOrigin = path.join(VIEWS_PATH, 'proto', page.origin + '.twig')
+    var viewsOrigin = path.join(VIEWS_PATH, 'proto', page.origin + '.html')
 
     if (!page.origin) {
-        viewsOrigin = path.join(VIEWS_PATH, 'proto', '__' + page.group + '.twig');
+        viewsOrigin = path.join(VIEWS_PATH, 'proto', '__' + page.group + '.html');
     }
 
     if (_.findIndex(MSMAP[itemGroup], {
@@ -91,7 +88,7 @@ muse.deletePage = function(item, callback) {
     var group = item.group;
     var name = item.name;
 
-    var viewsPath = path.join(VIEWS_PATH, group, name + '.twig');
+    var viewsPath = path.join(VIEWS_PATH, group, name + '.html');
     var fixturePath = path.join(FIXTURE_PATH, group, name + '.json');
 
     var marker = _.findIndex(MSMAP[group], {
@@ -170,7 +167,7 @@ muse.XMLizeImages = function(dir, callback) {
             var alt = $(el).attr('alt') || '';
             var datasrc = $(el).data('src') ? true : false;
 
-            var msid = _.result(_.find(MSMAP.images, function(item) {
+            var msid = _.result(_.find(muse.db, function(item) {
                 return item.name === filename;
             }), 'msid');
 
@@ -200,8 +197,8 @@ muse.exportPage = function(flag, callback) {
     // и рендерим их
     async.each(MSMAP.pages, function(page, cb) {
 
-        var _preRender = fs.readFileSync(path.join(__dirname, '../views', 'pages', page.name + '.twig'), 'utf8');
-        var _tmp = path.join(__dirname, '../views/_tmp', page.name + '.twig');
+        var _preRender = fs.readFileSync(path.join(__dirname, '../views', 'pages', page.name + '.html'), 'utf8');
+        var _tmp = path.join(__dirname, '../views/_tmp', page.name + '.html');
 
         muse.injectFragments(_preRender, page.name, function() {
             // Передаем контекст из fixture, если он есть
@@ -233,7 +230,7 @@ muse.exportPage = function(flag, callback) {
 
 muse.exportFragment = function(callback) {
     async.each(MSMAP.fragments, function(page, cb) {
-        var _template = path.join(__dirname, '../views', 'fragments', page.name + '.twig');
+        var _template = path.join(__dirname, '../views', 'fragments', page.name + '.html');
         var content = nunjucks.render(_template);
 
         fs.writeFileSync(path.join(EXPORT_FRAGMENTS, page.name + '.html'), content);
@@ -260,7 +257,7 @@ muse.injectFragments = function(content, pagename, cb) {
     var ctx = content;
 
     async.each(MSMAP.fragments, function(n, next) {
-        var re = new RegExp('\\{\\%+\\s+include\\s+\\"..\\/fragments\\/' + n.name + '.twig([^\\"]*)"[^\\}]*\\%\\}', 'g');
+        var re = new RegExp('\\{\\%+\\s+include\\s+\\"..\\/fragments\\/' + n.name + '.html([^\\"]*)"[^\\}]*\\%\\}', 'g');
         var replacement = '<mscom:contentinclude ajaxrendered=\"false\" md:pageid=\"' + n._id + '\" instancename=\"' + n.name + '\"></mscom:contentinclude>';
 
         if (re.test(ctx)) {
@@ -270,7 +267,7 @@ muse.injectFragments = function(content, pagename, cb) {
             next();
         }
     }, function() {
-        fs.writeFile(path.join(__dirname, '../views/_tmp/', pagename + '.twig'), ctx, function(err) {
+        fs.writeFile(path.join(__dirname, '../views/_tmp/', pagename + '.html'), ctx, function(err) {
             console.log(err);
             cb()
         });
@@ -348,7 +345,6 @@ muse.importData = function(data, cb) {
 
 
 muse.syncWithMap = function(callback, next) {
-    // ###################################
     // Удаляем страницы/фрагменты которых
     // нет в файле msmspping.json
     // Использовать крайне осторожно! =)
@@ -422,6 +418,22 @@ muse.checkSyncedFolder = function(units, callback) {
     });
 };
 
+
+muse.removeImage = function (res, item, callback) {
+    var obj = _.find(muse.db['images'], { _id: item._id }),
+        img = obj.name,
+        imgPath = path.join(IMAGES_DIR, img);
+    try {
+        fs.accessSync(imgPath, fs.F_OK);
+        fs.unlinkSync(imgPath);
+        res.send({})
+    } catch (e) {
+        console.log(e);
+        
+        callback()
+    }
+
+}
 
 
 module.exports = muse;

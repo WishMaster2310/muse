@@ -29,7 +29,7 @@ module.exports = function(grunt) {
 
 		watch: {
 			express: {
-				files:  [ '**/*.js', '**/*.twig', '**/*/*.twig', '!extd/*.js'],
+				files:  [ '**/*.js', 'views/*.html', 'views/**.html', '!extd/*.js'],
 				tasks:  [ 'express:dev'],
 				options: {
 					spawn: false 
@@ -47,7 +47,7 @@ module.exports = function(grunt) {
 
 	grunt.loadNpmTasks('grunt-express-server');
 	grunt.loadNpmTasks('grunt-contrib-watch');
-	grunt.loadNpmTasks('grunt-contrib-sass');
+	grunt.loadNpmTasks('grunt-sass');
 
 	// Default task(s).
 	grunt.registerTask('default', ['express:dev', 'sass', 'watch']);

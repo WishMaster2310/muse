@@ -47,7 +47,7 @@ app.all('*', function(req, res, next) {
 
   // find page
   var targetPage = _.find(viewsDir, function(n) {
-    return n == reqPath + '.twig'
+    return n == reqPath + '.html'
   });
 
   // find page Data
@@ -85,7 +85,7 @@ var watcher = require('./modules/watcher')();
 if (app.get('env') === 'development') {
   app.use(function(err, req, res, next) {
     res.status(err.status || 500);
-    res.render('admin/error.twig', {
+    res.render('admin/error.html', {
       message: err.message,
       error: err
     });
@@ -96,7 +96,7 @@ if (app.get('env') === 'development') {
 // no stacktraces leaked to user
 app.use(function(err, req, res, next) {
   res.status(err.status || 500);
-  res.render('admin/error.twig', {
+  res.render('admin/error.html', {
     message: err.message,
     error: {}
   });

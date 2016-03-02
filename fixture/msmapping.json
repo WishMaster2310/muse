@@ -1,88 +1,51 @@
 {
     "pages": [
         {
-            "name": "tester",
+            "name": "rerere",
             "group": "pages",
-            "status": "new",
-            "fixture": false,
-            "msid": "",
-            "_id": "50513192e938240a128296aadb2856d88ac86bfa",
-            "ctime": 1452075392745
+            "status": "sync",
+            "fixture": "true",
+            "msid": "wewewe",
+            "_id": "cba3f8ed0267866569d34bad49b44793a63f5a12",
+            "ctime": 1456903147091
         },
         {
-            "name": "ewewe",
+            "name": "232323",
+            "group": "pages",
+            "status": "new",
+            "fixture": "true",
+            "msid": "",
+            "_id": "6311f5dbc8aa1fa2d23aafad6bb225ca0ebd0189",
+            "ctime": 1456903313761
+        },
+        {
+            "name": "3434",
             "group": "pages",
             "status": "new",
             "fixture": false,
             "msid": "",
-            "_id": "0eecf50cfed5debb11ad3a89030ebf49b453efd0",
-            "ctime": 1452091989241
+            "_id": "23b03b4207d0077a7f1cb29117c2d56d21f93357",
+            "ctime": 1456903600574
         }
     ],
     "fragments": [
         {
-            "name": "myfragment",
+            "name": "TestFr",
             "group": "fragments",
-            "status": "sync",
+            "status": "new",
             "fixture": false,
-            "msid": "erer",
-            "_id": "7ff447a3c174d85d4ef7044563abec66b691e991",
-            "ctime": 1450769727383
-        },
-        {
-            "name": "67676767",
-            "group": "fragments",
-            "status": "sync",
-            "fixture": false,
-            "msid": "wewewe",
-            "_id": "9d1dade2ef8aa1b1cd7cc6e1eb0d4753b34c4a9a",
-            "ctime": 1451025773602
-        },
-        {
-            "name": "newfrag",
-            "group": "fragments",
-            "status": "sync",
-            "fixture": "true",
-            "msid": "3434",
-            "_id": "cc46666f36af29ef09bbd97618d7c78b1fcc0274",
-            "ctime": 1451026343395
+            "msid": "",
+            "_id": "ade8baf4abdc5a8bf97cce5b894e601306331c29",
+            "ctime": 1456902398549
         }
     ],
     "images": [
         {
-            "path": "C:\\projects\\sitemuse\\muse\\public\\images\\preloader.gif",
-            "name": "preloader.gif",
-            "size": 10545,
-            "msid": "",
-            "_id": "fab326d6b8d903223e724df3311c2955320473a2"
-        },
-        {
-            "path": "C:\\projects\\sitemuse\\muse\\public\\images\\prizes.jpg",
-            "name": "prizes.jpg",
-            "size": 222822,
-            "msid": "",
-            "_id": "10d1caf8c2c6eaa495adc87bf56bb9823db7637a"
-        },
-        {
-            "path": "C:\\projects\\sitemuse\\muse\\public\\images\\prize1.gif",
+            "path": "D:\\projects\\sitemuse\\public\\images\\prize1.gif",
             "name": "prize1.gif",
             "size": 123261,
             "msid": "",
-            "_id": "d58554347947823ddef71c643da332a417ba0abe"
-        },
-        {
-            "path": "C:\\projects\\sitemuse\\muse\\public\\images\\vidp4.jpg",
-            "name": "vidp4.jpg",
-            "size": 42549,
-            "msid": "",
-            "_id": "13416fd0158fdc669cdb15bbf0cfede005e0e4ba"
-        },
-        {
-            "path": "C:\\projects\\sitemuse\\muse\\public\\images\\wip1.png",
-            "name": "wip1.png",
-            "size": 17267,
-            "msid": "",
-            "_id": "11af50913c8d6582cfb282e875e2b46496e3ebc8"
+            "_id": "603bb8de03e7d51c0d4d8199108e538b0d54582a"
         }
     ]
 }

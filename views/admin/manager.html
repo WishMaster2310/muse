@@ -1,4 +1,4 @@
-{% extends "./manager_layout.twig" %}
+{% extends "./manager_layout.html" %}
 {% block content %}
 <div class="manager-wrapper">
 	<aside class="manager-aside">
@@ -90,7 +90,7 @@
 					</div>
 				</div>	
 				<div class="admin-tabs__content-item" data-bind="visible: m_site.activeTab() === 'pages'">
-					<h1 class="manager-title">Page Fragments</h1>
+					<h1 class="manager-title">Pages</h1>
 
 					<div data-bind="foreach: m_site.pages" class="comp-list">
 						<div class="comp-list__item">
@@ -126,12 +126,9 @@
 							    	<li class="tag-new">New</li>
 							    <!-- /ko -->
 							</ul>
-
-
-
 						</div>
 					</div>
-				</div>	
+				</div>
 				
 				<div class="admin-tabs__content-item" data-bind="visible: m_site.activeTab() === 'images'">
 					<h1 class="manager-title">Images</h1>
